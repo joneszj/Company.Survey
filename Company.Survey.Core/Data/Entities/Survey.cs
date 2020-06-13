@@ -2,11 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Company.Survey.Core.Data.Entities
 {
     public class Survey : CoreBase
     {
+        /// <summary>
+        /// Composite Key
+        /// </summary>
+        [Key, Column(Order = 1)]
+        public int Version { get; set; }
         public bool IsComplete { get; set; } = false;
         [Required]
         public string CompanyName { get; set; }
@@ -17,8 +23,6 @@ namespace Company.Survey.Core.Data.Entities
         [Required]
         [Phone]
         public string ContactPhone { get; set; }
-        [Required]
-        public int Version { get; set; }
         [Required]
         public DateTime DateOfQuestionnaire { get; set; }
         public DateTime RequestedStartDate { get; set; }

@@ -1,0 +1,6 @@
+dal:
+	connection string defaults to localdb with a db called CompanySurveyCore so ensure localdb is active and db CompanySurveyCore exists
+		else change connection string
+		apply migrations: 
+			1 Ensure .core is selected in default project package manage console
+			2 Update-Database -StartupProject Company.Survey.API

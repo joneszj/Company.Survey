@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Company.Survey.Core.Data.Entities
 {
     public class SurveyStep : CoreBase
     {
+
         public StepContent StepContent { get; set; }
         public string Title { get; set; }
         public int Order { get; set; }
@@ -15,5 +17,7 @@ namespace Company.Survey.Core.Data.Entities
         /// Collection of grouped questions
         /// </summary>
         public ICollection<SurveyQuestionGroup> QuestionGroups { get; set; }
+        public int SurveyId { get; set; }
+        public Survey Survey { get; set; }
     }
 }
