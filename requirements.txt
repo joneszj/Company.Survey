@@ -1,0 +1,24 @@
+A custom software app that allows clients to fill out a survey on a web form and allows company
+employees to update webform and download pdf/Word Version of the Completed Survey.
+
+Views (.Web):
+	Survey
+		Anonymous
+		Secure Link
+		Updates/Commits on changes
+		Downloadable PDF
+
+Views (Admin):
+	Home
+	Clients
+	Client Survey
+	User Management: TODO: needs clarification
+	My Account
+	Reports
+
+.core: encapsulates bll and dal
+
+Entities:
+	Customer: users that can fill out a survey
+	Survey: 
+	Admin: 

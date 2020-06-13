@@ -1,0 +1,17 @@
+init
+	add .core
+		encapsulates bll and dal
+		add dal entities
+			data/entities:
+				corebase: basic audit fields and soft delete IsActive field
+				client: represents a user to submit a survey form
+				survey: the sury users fill out and admins manage
+					surey steps: subsections of surveys that contain survey questions.
+						survey questions: individual questions
+						survey question groups: survey questions designed as a group
+							NOTE: the example survey from the email displays a table to the user which inspired this design. Candidate for optimization
+						Note: questions and question groups have an order property indicating their render position
+						Note: questions and question groups have notes (read only labels) and anser example texts (likely as placeholds when rendered)
+						Note: the example survey has several questions that would be better designed as radios/checkboxes/selects
+	add .api
+		simple api that interacts with .core to retrieve and commit surveys
