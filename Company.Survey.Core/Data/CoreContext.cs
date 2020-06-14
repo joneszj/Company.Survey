@@ -416,6 +416,7 @@ namespace Company.Survey.Core.Data
                             {
                                 Id = -30,
                                 SurveyStepId = -3,
+                                SurveyQuestionGroupID = -5,
                                 Quesiton = "Name of Server",
                                 ReplyType = QuestionReplyTypes.Text,
                                 Order = 0
@@ -424,6 +425,7 @@ namespace Company.Survey.Core.Data
                             {
                                 Id = -31,
                                 SurveyStepId = -3,
+                                SurveyQuestionGroupID = -5,
                                 Quesiton = "Describe the Type of Server",
                                 ReplyType = QuestionReplyTypes.Text,
                                 Order = 1
@@ -432,6 +434,7 @@ namespace Company.Survey.Core.Data
                             {
                                 Id = -32,
                                 SurveyStepId = -3,
+                                SurveyQuestionGroupID = -5,
                                 Quesiton = "OS Type & Version",
                                 ReplyType = QuestionReplyTypes.Text,
                                 Order = 2
@@ -440,6 +443,7 @@ namespace Company.Survey.Core.Data
                             {
                                 Id = -33,
                                 SurveyStepId = -3,
+                                SurveyQuestionGroupID = -5,
                                 Quesiton = "Total Storage of Server in (GB'S TB'S) & amp; Partitions",
                                 ReplyType = QuestionReplyTypes.Text,
                                 Order = 3
@@ -448,6 +452,7 @@ namespace Company.Survey.Core.Data
                             {
                                 Id = -34,
                                 SurveyStepId = -3,
+                                SurveyQuestionGroupID = -5,
                                 Quesiton = "State of Server (Physical, Virtual, Hyper-Visor)",
                                 ReplyType = QuestionReplyTypes.Text,
                                 Order = 4

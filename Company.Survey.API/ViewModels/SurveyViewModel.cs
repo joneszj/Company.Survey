@@ -15,7 +15,7 @@ namespace Company.Survey.API.ViewModels
             CompanySite = clientSurvey.Survey.CompanySite;
             Contact = $"{clientSurvey.Survey.ContactTitle} {clientSurvey.Survey.ContactPhone}";
             DateOfQuestionnaire = clientSurvey.Survey.DateOfQuestionnaire;
-            Steps = clientSurvey.Survey.SurveySteps.Select(surveyStep => new Step(surveyStep, clientSurvey.ClientQuestionReplies));
+            Steps = clientSurvey.Survey.SurveySteps.Select(surveyStep => new Step(surveyStep, clientSurvey.ClientQuestionReplies)).OrderBy(e=>e.Order);
         }
 
         public bool IsComplete { get; set; }
@@ -36,8 +36,10 @@ namespace Company.Survey.API.ViewModels
             Title = step.Title;
             Order = step.Order;
             StepContent = new Content(step.StepContent);
-            Questions = step.Questions.Select(question => new Question(question, replies));
-            GroupedQuestions = step.QuestionGroups.Select(group => new Group(group));
+            Questions = step.Questions.Where(e=>e.SurveyQuestionGroupID == null)
+                .Select(question => new Question(question, replies))
+                .Concat(step.QuestionGroups.Select(g => new Question(g, replies)))
+                .OrderBy(e=>e.Order);
         }
 
         public string Title { get; set; }
@@ -63,6 +65,13 @@ namespace Company.Survey.API.ViewModels
 
     public class Question
     {
+        public Question(SurveyQuestionGroup g, ICollection<Reply> replies)
+        {
+            Order = g.Order;
+            QuesitonText = g.Title;
+            GroupedQuestions = g.SurveyGroupQuestions.OrderBy(e => e.Order)
+                .Select(e => new Question(e, replies));
+        }
 
         public Question(SurveyQuestion question, ICollection<Reply> replies)
         {
@@ -82,6 +91,7 @@ namespace Company.Survey.API.ViewModels
         public IEnumerable<string> ExampleReplies { get; set; }
         public int? GroupId { get; set; }
         public string ClientReply { get; set; }
+        public IEnumerable<Question> GroupedQuestions { get; set; }
     }
 
     public class Group
