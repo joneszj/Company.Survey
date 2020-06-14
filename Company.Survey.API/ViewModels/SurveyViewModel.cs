@@ -15,9 +15,7 @@ namespace Company.Survey.API.ViewModels
             CompanySite = clientSurvey.Survey.CompanySite;
             Contact = $"{clientSurvey.Survey.ContactTitle} {clientSurvey.Survey.ContactPhone}";
             DateOfQuestionnaire = clientSurvey.Survey.DateOfQuestionnaire;
-            Steps = clientSurvey.Survey.SurveySteps.Select(surveyStep => new Step(surveyStep));
-
-            SetClientQuestionReplies(clientSurvey.ClientQuestionReplies);
+            Steps = clientSurvey.Survey.SurveySteps.Select(surveyStep => new Step(surveyStep, clientSurvey.ClientQuestionReplies));
         }
 
         public bool IsComplete { get; set; }
@@ -29,29 +27,16 @@ namespace Company.Survey.API.ViewModels
         public DateTime RequestedStartDate { get; set; }
         public DateTime RequestedEndDate { get; set; }
         public IEnumerable<Step> Steps { get; set; }
-
-        // TODO: Candidate for optimization
-        private void SetClientQuestionReplies(ICollection<Reply> reply)
-        {
-            this.Steps.ToList().ForEach(step => 
-            { 
-                step.Questions.Where(e => reply.Select(r => r.SurveyQuestionId).Contains(e.Id)).ToList()
-                .ForEach(e => 
-                {
-                    e.ClientReply = reply.Where(r => r.SurveyQuestionId == e.Id).FirstOrDefault().ReplyData;
-                }); 
-            });
-        }
     }
 
     public class Step
     {
-        public Step(SurveyStep step)
+        public Step(SurveyStep step, ICollection<Reply> replies)
         {
             Title = step.Title;
             Order = step.Order;
             StepContent = new Content(step.StepContent);
-            Questions = step.Questions.Select(question => new Question(question));
+            Questions = step.Questions.Select(question => new Question(question, replies));
             GroupedQuestions = step.QuestionGroups.Select(group => new Group(group));
         }
 
@@ -66,8 +51,11 @@ namespace Company.Survey.API.ViewModels
     {
         public Content(StepContent stepContent)
         {
-            Title = stepContent.Title;
-            ContentBlocks = stepContent.ContentBlocks.Select(e => e.ContentData);
+            if (stepContent != null)
+            {
+                Title = stepContent.Title;
+                ContentBlocks = stepContent.ContentBlocks.Select(e => e.ContentData);
+            }
         }
         public string Title { get; set; }
         public IEnumerable<string> ContentBlocks { get; set; }
@@ -75,21 +63,24 @@ namespace Company.Survey.API.ViewModels
 
     public class Question
     {
-        public Question(SurveyQuestion question)
+
+        public Question(SurveyQuestion question, ICollection<Reply> replies)
         {
             Id = question.Id;
             QuesitonText = question.Quesiton;
             Note = question.Note;
             Order = question.Order;
-            ExampleReplies = question.PossibleReplies.Select(e => e.ReplyData);
-            GroupId = question?.SurveyQuestionGroup?.Id ?? 0;
+            ExampleReplies = question?.PossibleReplies?.Select(e => e.ReplyData);
+            GroupId = question?.SurveyQuestionGroup?.Id;
+            ClientReply = replies.FirstOrDefault(e => e.SurveyQuestionId == question.Id)?.ReplyData;
         }
+
         public int Id { get; set; }
         public string QuesitonText { get; set; }
         public string Note { get; set; }
         public int Order { get; set; }
         public IEnumerable<string> ExampleReplies { get; set; }
-        public int GroupId { get; set; }
+        public int? GroupId { get; set; }
         public string ClientReply { get; set; }
     }
 
