@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Company.Survey.API.ViewModels;
+using Company.Survey.Core.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Company.Survey.Core.Data;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Company.Survey.API.Controllers
 {
@@ -20,25 +21,31 @@ namespace Company.Survey.API.Controllers
             _context = context;
         }
 
-        // GET: api/Surveys
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Survey.Core.Data.Entities.Survey>>> GetSurveys()
+        public async Task<ActionResult<IEnumerable<Core.Data.Entities.Survey>>> GetSurveys()
         {
             return await _context.Surveys.ToListAsync();
         }
 
-        // GET: api/Surveys/5
-        [HttpGet("{id}/version/{version}")]
-        public async Task<ActionResult<Survey.Core.Data.Entities.Survey>> GetSurvey(int id, int version)
+        [HttpGet("/{email}/{userKey}")]
+        public async Task<ActionResult<SurveyViewModel>> GetSurveyByClientSurveyKey(SurveyRequestViewModel surveyRequestViewModel)
         {
-            var survey = await _context.Surveys.FindAsync(id, version);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (survey == null)
-            {
-                return NotFound();
-            }
+            var survey = await _context.Clients
+                .Include(e => e.ClientSurveys.Where(e => e.ClientSurveyKey == surveyRequestViewModel.Key && e.Client.Email == surveyRequestViewModel.Email))
+                    .ThenInclude(e => e.Survey)
+                        .ThenInclude(e => e.SurveySteps)
+                            .ThenInclude(e => e.Questions)
+                .Include(e => e.ClientSurveys.Where(e => e.ClientSurveyKey == surveyRequestViewModel.Key && e.Client.Email == surveyRequestViewModel.Email))
+                    .ThenInclude(e => e.Survey)
+                        .ThenInclude(e => e.SurveySteps)
+                            .ThenInclude(e => e.QuestionGroups)
+                                .ThenInclude(e => e.SurveyGroupQuestions)
+                .FirstOrDefaultAsync();
 
-            return survey;
+            if (survey == null) return NotFound();
+            return Ok(new SurveyViewModel(survey.ClientSurveys.Single()));
         }
 
         //// PUT: api/Surveys/5

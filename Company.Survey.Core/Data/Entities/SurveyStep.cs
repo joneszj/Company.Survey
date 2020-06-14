@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Company.Survey.Core.Data.Entities
 {
@@ -17,7 +18,9 @@ namespace Company.Survey.Core.Data.Entities
         /// Collection of grouped questions
         /// </summary>
         public ICollection<SurveyQuestionGroup> QuestionGroups { get; set; }
+
         public int SurveyId { get; set; }
+        public int SurveyVersion { get; set; }
         public Survey Survey { get; set; }
     }
 }

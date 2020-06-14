@@ -13,31 +13,63 @@ namespace Company.Survey.Core.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            BuildValueConversions(modelBuilder);
+            BuildMappings(modelBuilder);
+            SeedDatabase(modelBuilder);
+        }
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<Entities.Survey> Surveys { get; set; }
 
-            #region value conversion
+        #region helpers
+        private static void BuildValueConversions(ModelBuilder modelBuilder)
+        {
             modelBuilder
                 .Entity<SurveyQuestion>()
                 .Property(e => e.ReplyType)
                 .HasConversion(
                     v => v.ToString(),
                     v => (QuestionReplyTypes)Enum.Parse(typeof(QuestionReplyTypes), v));
-            #endregion
-
-            #region db seed
+        }
+        private static void BuildMappings(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Entities.Survey>().HasIndex(e => new { e.SuveryId, e.Version }).IsUnique(true);
+            modelBuilder.Entity<SurveyStep>()
+                .HasOne(e => e.Survey)
+                .WithMany(e => e.SurveySteps)
+                .HasPrincipalKey(e => new { e.SuveryId, e.Version })
+                .HasForeignKey(e => new { e.SurveyId, e.SurveyVersion });
+        }
+        private static void SeedDatabase(ModelBuilder modelBuilder)
+        {
+            var testClient = new Client
+            {
+                Id = -1,
+                Email = "joneszj@gmail.com",
+                FirstName = "Zachary",
+                LastName = "Jones",
+                Phone = "555-333-1111",
+                CompanyName = "Test Company"
+            };
+            var testClientSurvey = new ClientSurveys
+            {
+                Id = -1,
+                ClientSurveyKey = Guid.Empty,
+                ClientId = -1,
+                SurveyId = -1
+            };
             const int Version = 8;
             const string CompanyName = "Databerry";
-
-            modelBuilder.Entity<Entities.Survey>().HasKey(e => new { e.Id, e.Version });
             modelBuilder.Entity<Entities.Survey>().HasData(new Entities.Survey
             {
                 // seed does not recognize identity when set on property so we must set it manually
                 // ef core recomends negative values to prevent conflict of seeded and non-seeded data
                 Id = -1,
+                SuveryId = -1,
+                Version = Version,
                 CompanyName = CompanyName,
                 CompanySite = "www.databerry.com",
                 ContactTitle = "Phone",
                 ContactPhone = "855-350-0707",
-                Version = Version,
                 Title = $"Infrastructure Migration Survey Form V{Version}",
                 DateOfQuestionnaire = DateTime.Today,
             });
@@ -46,18 +78,21 @@ namespace Company.Survey.Core.Data
                     new SurveyStep {
                         Id = -1,
                         SurveyId = -1,
+                        SurveyVersion = Version,
                         Title = "Organization/Company &amp; Primary Contact Details: Step A",
                         Order = 0
                     },
                     new SurveyStep {
                         Id = -2,
                         SurveyId = -1,
+                        SurveyVersion = Version,
                         Title = "Source Migration Infrastructure Details: Step B",
                         Order = 1
                     },
                     new SurveyStep {
                         Id = -3,
                         SurveyId = -1,
+                        SurveyVersion = Version,
                         Title = "Destination Migration Infrastructure Details: Step C",
                         Order = 2
                     }
@@ -691,10 +726,16 @@ namespace Company.Survey.Core.Data
                     SurveyQuestionId = -34,
                     ReplyData = "Hyper-Visor" }
             });
-            #endregion
+            modelBuilder.Entity<Client>().HasData(testClient);
+            modelBuilder.Entity<ClientSurveys>().HasData(testClientSurvey);
+            modelBuilder.Entity<Reply>().HasData(new Reply
+            {
+                Id = -62,
+                ClientSurveyId = -1,
+                SurveyQuestionId = -1,
+                ReplyData = "Azure"
+            });
         }
-
-        public DbSet<Client> Clients { get; set; }
-        public DbSet<Entities.Survey> Surveys { get; set; }
+        #endregion
     }
 }
