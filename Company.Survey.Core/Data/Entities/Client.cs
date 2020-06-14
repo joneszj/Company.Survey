@@ -5,6 +5,6 @@ namespace Company.Survey.Core.Data.Entities
 {
     public class Client : CoreBase
     {
-        public ICollection<Survey> ClientSurveys { get; set; }
+        public ICollection<ClientSurveys> ClientSurveys { get; set; }
     }
 }

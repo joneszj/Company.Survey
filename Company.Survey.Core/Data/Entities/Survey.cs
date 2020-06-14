@@ -32,5 +32,6 @@ namespace Company.Survey.Core.Data.Entities
         /// Requested Survey Questions & Possible Replies
         /// </summary>
         public ICollection<SurveyStep> SurveySteps { get; set; }
+        public ICollection<ClientSurveys> ClientSurveys { get; set; }
     }
 }
