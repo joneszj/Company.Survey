@@ -7,7 +7,7 @@ namespace Company.Survey.Core.Data.Entities
     public class SurveyQuestion : CoreBase
     {
         [Required]
-        public string Quesiton { get; set; } = string.Empty;
+        public string Quesiton { get; set; }
         public string Note { get; set; }
         public int Order { get; set; }
         [Required]
