@@ -1,7 +1,10 @@
+build solution
 dal:
-	connection string defaults to localdb with a db called CompanySurveyCore so ensure localdb is active and db CompanySurveyCore exists
+	0 connection string defaults to localdb with a db called CompanySurveyCore so ensure localdb is active and db CompanySurveyCore exists (ef should create it on the update-database command)
 		else change connection string
-		apply migrations: 
-			1 Ensure .core is selected in default project package manage console
-			2 Update-Database -StartupProject Company.Survey.API
-				- clientSurveys throws when seeding from ef, please use the sql provided to manually insert
+	1 Ensure .core is selected in default project package manage console
+	2 Update-Database -StartupProject Company.Survey.API
+		- clientSurveys throws when seeding from ef (unknown as to why), please use the sql provided to manually any remaining seed data
+	3 Set .api and .angular projects as startup projects
+
+	if you add the seed data, you can go to https://localhost:44331/joneszj@gmail.com/00000000-0000-0000-0000-000000000000 for a demo survey

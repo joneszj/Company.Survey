@@ -18,21 +18,22 @@ namespace Company.Survey.API.Controllers
         public ReplyController(CoreContext context) => _context = context;
 
         [HttpPost]
-        public async Task<ActionResult> CreateReply([FromBody] PutPostReplyViewModel viewModel, [FromQuery] Guid Key) 
+        public async Task<ActionResult<int>> CreateReply([FromBody] PutPostReplyViewModel viewModel, [FromQuery] Guid Key) 
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var clientsurvey = await _context.ClientSurveys.Where(e => e.ClientSurveyKey == Key)
                 .Include(e=>e.ClientQuestionReplies)
                 .FirstOrDefaultAsync();
             if (clientsurvey == null) return NotFound();
-            clientsurvey.ClientQuestionReplies.Add(new Reply() 
-            { 
+            var newReply = new Reply()
+            {
                 SurveyQuestionId = viewModel.SurveyQuestionId,
                 ReplyData = viewModel.Value,
                 GroupIndex = viewModel.GroupdIndex.Value
-            });
+            };
+            clientsurvey.ClientQuestionReplies.Add(newReply);
             await _context.SaveChangesAsync();
-            return Ok();
+            return Ok(newReply.Id);
         }
 
         [HttpPut]

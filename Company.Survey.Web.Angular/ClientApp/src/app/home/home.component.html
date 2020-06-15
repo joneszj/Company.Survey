@@ -15,11 +15,6 @@
     </div>
   </div>
   <div *ngFor="let step of survey.steps; let i = index;">
-    <div class="row pt-3 pb-3">
-      <div class="col border">
-        {{step.title}}
-      </div>
-    </div>
     <div *ngIf="i == 0">
       <div class="row border">
         <div class="row col input-group input-group-sm">
@@ -59,6 +54,16 @@
         <div class="row col">
           <span class="padLeft">Requested End Date:</span>
           <span class="col input-group input-group-sm"><input (blur)="updateSurvey()" value="{{survey.requestedEndDate}}" id="requestedEndDate" type="date" class="form-control surveyInput" placeholder=""></span>
+        </div>
+      </div>
+    </div>
+    <div class="row pt-3 pb-3">
+      <div class="col border">
+        {{step.title}}
+        <div *ngIf="step.stepContent">
+          <div *ngFor="let content in step.stepContent.contentBlocks">
+            {{content}}
+          </div>
         </div>
       </div>
     </div>

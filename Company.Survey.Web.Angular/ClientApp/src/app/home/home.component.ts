@@ -75,7 +75,11 @@ export class HomeComponent {
           surveyQuestionId: Number(event.target.id),
           value: event.target.value,
           groupdIndex: Number(event.target.dataset.replyindex)
-        } as PutReplyViewModel).subscribe(res => event.target.dataset.isnew = false)
+        } as PutReplyViewModel).subscribe(res => {
+          debugger;
+          event.target.id = res;
+          event.target.dataset.isnew = false;
+        })
       }
     } else {
       // TODO: add depuping gaurd
@@ -93,6 +97,8 @@ export class HomeComponent {
     const lastRow = sourceRow.parentElement.getElementsByTagName('tbody')[0].children[sourceRow.parentElement.getElementsByTagName('tbody')[0].children.length - 1];
     const targetRow = lastRow.cloneNode(true);
     Array.from(lastRow.querySelectorAll('input')).forEach((e: HTMLInputElement) => {
+      e.id = "",
+      e.dataset.isnew = "true",
       e.value = "";
       e.dataset.replyindex = lastRow.querySelectorAll('input')[0].dataset.replyindex + 1;
     });
