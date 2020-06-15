@@ -14,7 +14,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Survey.API", "Company.Survey.API\Company.Survey.API.csproj", "{56B64ED9-600D-4EF3-8A6B-4ED23F05A06E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.Survey.Web.Angular", "Company.Survey.Web.Angular\Company.Survey.Web.Angular.csproj", "{B2F0F921-4840-47ED-89CA-C6C3301E5251}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Survey.Web.Angular", "Company.Survey.Web.Angular\Company.Survey.Web.Angular.csproj", "{B2F0F921-4840-47ED-89CA-C6C3301E5251}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{E4333DB1-A08A-4B26-8182-5574BF7642B6}"
+	ProjectSection(SolutionItems) = preProject
+		SqlSeed.sql = SqlSeed.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

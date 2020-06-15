@@ -18,12 +18,12 @@ namespace Company.Survey.API.ViewModels
             Phone = client.Phone;
             Email = client.Email;
         }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string CompanyName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string CompanyName { get; set; } = string.Empty;
         [Phone]
-        public string Phone { get; set; }
+        public string Phone { get; set; } = string.Empty;
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
     }
 }

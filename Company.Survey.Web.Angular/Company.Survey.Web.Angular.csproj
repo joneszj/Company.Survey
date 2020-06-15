@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\home\table.component.ts" />
     <None Remove="ClientApp\src\app\Interfaces\clientViewModel.ts" />
     <None Remove="ClientApp\src\app\Interfaces\putReplyViewModel.ts" />
     <None Remove="ClientApp\src\app\Interfaces\putSurveyViewModel.ts" />
@@ -31,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\home\table.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Interfaces\clientViewModel.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Interfaces\putReplyViewModel.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Interfaces\putSurveyViewModel.ts" />

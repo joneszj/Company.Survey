@@ -2,10 +2,23 @@
     padding-left: 15px;
 }
 
-.noPad: {
+.noPad {
   padding: 0px !important;
 }
 
-.lessFontSize: {
+.lessFontSize {
   font-size: 0.9rem;
 }
+
+/* for printing src: https://stackoverflow.com/a/8356996 
+@media screen {
+  #head {
+    display: initial;
+  }
+}
+@media print {
+  #head {
+    position: fixed;
+  }
+}
+    */

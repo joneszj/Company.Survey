@@ -4,7 +4,7 @@ namespace Company.Survey.API.ViewModels
 {
     public class PutSurveyViewModel
     {
-        public DateTime RequestedStartDate { get; set; }
-        public DateTime RequestedEndDate { get; set; }
+        public string RequestedStartDate { get; set; }
+        public string RequestedEndDate { get; set; }
     }
 }

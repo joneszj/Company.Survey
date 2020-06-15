@@ -34,6 +34,7 @@ export interface Question {
   exampleReplies: string[];
   groupId: number | null;
   clientReply: string;
+  groupedReplies: string[];
   groupedQuestions: Question[];
 }
 

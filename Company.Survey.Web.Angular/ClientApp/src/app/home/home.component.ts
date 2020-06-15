@@ -16,7 +16,6 @@ export class HomeComponent {
   hasLoaded = false;
   notFound = false;
   survey: SurveyViewModel;
-    db: void;
 
   constructor(
     private _http: HttpClient,
@@ -32,25 +31,18 @@ export class HomeComponent {
     }
     this._http.get<SurveyViewModel>(`${environment.ApiBaseUrl}/surveys/${email}/?key=${key}`).subscribe(survey => {
       this.survey = survey;
-      this.addEventListeners();
       this.hasLoaded = true;
     });
   }
 
-  addEventListeners = () => {
-    Array.from(document.getElementsByClassName("clientInput")).forEach(e => e.addEventListener("blur", this.updateClient))
-    Array.from(document.getElementsByClassName("surveyInput")).forEach(e => e.addEventListener("blur", this.updateSurvey))
-  }
-
   updateClient = () => {
     const client = {
-      companyName: document.getElementById("companyName").nodeValue,
-      email: document.getElementById("email").nodeValue,
-      firstName: document.getElementById("firstName").nodeValue,
-      lastName: document.getElementById("lastName").nodeValue,
-      phone: document.getElementById("phone").nodeValue,
+      companyName: (document.getElementById("companyName") as HTMLInputElement).value,
+      email: (document.getElementById("email") as HTMLInputElement).value,
+      firstName: (document.getElementById("firstName") as HTMLInputElement).value,
+      lastName: (document.getElementById("lastName") as HTMLInputElement).value,
+      phone: (document.getElementById("phone") as HTMLInputElement).value,
     } as ClientViewModel;
-
     if (JSON.stringify(this.survey.client) !== JSON.stringify(client)) {
       this._http.put(`${environment.ApiBaseUrl}/client/?key=${this._route.snapshot.paramMap.get("key")}`, client).subscribe(() => this.survey.client = client);
     }
@@ -58,8 +50,8 @@ export class HomeComponent {
 
   updateSurvey = () => {
     const surveyUpdate = {
-      requestedStartDate: document.getElementById("requestedEndDate").nodeValue,
-      requestedEndDate: document.getElementById("requestedEndDate").nodeValue
+      requestedStartDate: (document.getElementById("requestedStartDate") as HTMLInputElement).value,
+      requestedEndDate: (document.getElementById("requestedEndDate") as HTMLInputElement).value
     } as PutSurveyViewModel;
     const survey = {
       requestedStartDate: this.survey.requestedStartDate,
@@ -67,7 +59,7 @@ export class HomeComponent {
     } as PutSurveyViewModel;
 
     if (JSON.stringify(survey) !== JSON.stringify(surveyUpdate)) {
-      this._http.put(`${environment.ApiBaseUrl}/survey/?key=${this._route.snapshot.paramMap.get("key")}`, surveyUpdate).subscribe(() => {
+      this._http.put(`${environment.ApiBaseUrl}/surveys/?key=${this._route.snapshot.paramMap.get("key")}`, surveyUpdate).subscribe(() => {
         this.survey.requestedStartDate = surveyUpdate.requestedStartDate;
         this.survey.requestedEndDate = surveyUpdate.requestedEndDate;
       });
@@ -76,9 +68,34 @@ export class HomeComponent {
 
   // TODO: really wanted this to be a debounce instead of blur, but couldn't get trailing debounce only to exectue
   updateQuestionReply = (event) => {
-    this._http.put(`${environment.ApiBaseUrl}/reply/?key=${this._route.snapshot.paramMap.get("key")}`, {
-      surveyQuestionId: Number(event.target.id),
-      value: event.target.value
-    } as PutReplyViewModel).subscribe(res => console.log(res))
+    if (event.target.dataset.isnew === 'true') {
+      if ((event.target as HTMLInputElement).value) {
+        // create group reply item
+        this._http.post(`${environment.ApiBaseUrl}/reply/?key=${this._route.snapshot.paramMap.get("key")}`, {
+          surveyQuestionId: Number(event.target.id),
+          value: event.target.value,
+          groupdIndex: Number(event.target.dataset.replyindex)
+        } as PutReplyViewModel).subscribe(res => event.target.dataset.isnew = false)
+      }
+    } else {
+      // TODO: add depuping gaurd
+      // TODO: this is functionaing as an upsert on the backend and should be separated
+      this._http.put(`${environment.ApiBaseUrl}/reply/?key=${this._route.snapshot.paramMap.get("key")}`, {
+        surveyQuestionId: Number(event.target.id),
+        value: event.target.value
+      } as PutReplyViewModel).subscribe(res => console.log(res))
+      // TODO: maybe add delete reply if value is empty
+    }
   };
+
+  addNewRow = () => {
+    const sourceRow = (event.target as HTMLElement).parentElement.parentElement.parentElement;
+    const lastRow = sourceRow.parentElement.getElementsByTagName('tbody')[0].children[sourceRow.parentElement.getElementsByTagName('tbody')[0].children.length - 1];
+    const targetRow = lastRow.cloneNode(true);
+    Array.from(lastRow.querySelectorAll('input')).forEach((e: HTMLInputElement) => {
+      e.value = "";
+      e.dataset.replyindex = lastRow.querySelectorAll('input')[0].dataset.replyindex + 1;
+    });
+    sourceRow.parentElement.getElementsByTagName('tbody')[0].insertBefore(targetRow, lastRow);
+  }
 }

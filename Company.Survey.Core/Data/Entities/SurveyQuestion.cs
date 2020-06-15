@@ -11,7 +11,7 @@ namespace Company.Survey.Core.Data.Entities
         public string Note { get; set; }
         public int Order { get; set; }
         [Required]
-        public QuestionReplyTypes ReplyType { get; set; }
+        public QuestionReplyTypes ReplyType { get; set; } = QuestionReplyTypes.Text;
         public ICollection<Reply> PossibleReplies { get; set; }
         public int SurveyStepId { get; set; }
         public SurveyStep SurveyStep { get; set; }
