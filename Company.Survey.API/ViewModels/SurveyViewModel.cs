@@ -11,10 +11,13 @@ namespace Company.Survey.API.ViewModels
         {
             IsComplete = clientSurvey.IsComplete;
             Title = clientSurvey.Survey.Title;
+            Client = new ClientViewModel(clientSurvey.Client);
             CompanyName = clientSurvey.Survey.CompanyName;
             CompanySite = clientSurvey.Survey.CompanySite;
             Contact = $"{clientSurvey.Survey.ContactTitle} {clientSurvey.Survey.ContactPhone}";
             DateOfQuestionnaire = clientSurvey.Survey.DateOfQuestionnaire;
+            RequestedStartDate = clientSurvey.RequestedStartDate;
+            RequestedEndDate = clientSurvey.RequestedEndDate;
             Steps = clientSurvey.Survey.SurveySteps.Select(surveyStep => new Step(surveyStep, clientSurvey.ClientQuestionReplies)).OrderBy(e=>e.Order);
         }
 
@@ -23,9 +26,10 @@ namespace Company.Survey.API.ViewModels
         public string CompanyName { get; set; }
         public string CompanySite { get; set; }
         public string Contact { get; set; }
+        public ClientViewModel Client { get; set; }
         public DateTime DateOfQuestionnaire { get; set; }
-        public DateTime RequestedStartDate { get; set; }
-        public DateTime RequestedEndDate { get; set; }
+        public DateTime? RequestedStartDate { get; set; }
+        public DateTime? RequestedEndDate { get; set; }
         public IEnumerable<Step> Steps { get; set; }
     }
 
@@ -33,6 +37,7 @@ namespace Company.Survey.API.ViewModels
     {
         public Step(SurveyStep step, ICollection<Reply> replies)
         {
+            Id = step.Id;
             Title = step.Title;
             Order = step.Order;
             StepContent = new Content(step.StepContent);
@@ -42,6 +47,7 @@ namespace Company.Survey.API.ViewModels
                 .OrderBy(e=>e.Order);
         }
 
+        public int Id { get; set; }
         public string Title { get; set; }
         public int Order { get; set; }
         public Content StepContent { get; set; }

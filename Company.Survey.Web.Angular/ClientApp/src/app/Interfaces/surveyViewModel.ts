@@ -1,6 +1,9 @@
+import { ClientViewModel } from "./clientViewModel";
+
 export interface SurveyViewModel {
   isComplete: boolean;
   title: string;
+  client: ClientViewModel;
   companyName: string;
   companySite: string;
   contact: string;
@@ -11,6 +14,7 @@ export interface SurveyViewModel {
 }
 
 export interface Step {
+  id: number;
   title: string;
   order: number;
   stepContent: Content;

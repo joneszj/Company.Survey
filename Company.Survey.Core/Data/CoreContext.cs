@@ -2,7 +2,6 @@
 using Company.Survey.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 
 namespace Company.Survey.Core.Data
 {
@@ -19,6 +18,7 @@ namespace Company.Survey.Core.Data
         }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Entities.Survey> Surveys { get; set; }
+        public DbSet<ClientSurveys> ClientSurveys { get; set; }
 
         #region helpers
         private static void BuildValueConversions(ModelBuilder modelBuilder)
@@ -484,6 +484,7 @@ namespace Company.Survey.Core.Data
                             {
                                 Id = -38,
                                 SurveyStepId = -3,
+                                ReplyType = QuestionReplyTypes.TextArea,
                                 Quesiton = "Please include any additional technical details that you may feel is important that was not covered above:",
                                 Order = 4,
                             }

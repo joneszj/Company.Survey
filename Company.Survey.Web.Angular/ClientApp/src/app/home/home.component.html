@@ -24,41 +24,41 @@
       <div class="row border">
         <div class="row col input-group input-group-sm">
           <span class="padLeft">Company Name:</span>
-          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control clientInput" id="companyName" placeholder="">{{survey.client.companyName}}</span>
         </div>
         <div class="row col">
           <span class="padLeft">First Name:</span>
-          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control clientInput" id="firstName" placeholder="">{{survey.client.firstName}}</span>
         </div>
       </div>
       <div class="row border">
         <div class="row col">
           <span class="padLeft">Phone:</span>
-          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control clientInput" id="phone" placeholder="">{{survey.client.phone}}</span>
         </div>
         <div class="row col">
           <span class="padLeft">Last Name:</span>
-          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control clientInput" id="lastName" placeholder="">{{survey.client.lastName}}</span>
         </div>
       </div>
       <div class="row border">
         <div class="row col">
           <span class="padLeft">Email:</span>
-          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control clientInput" id="email" placeholder="">{{survey.client.email}}</span>
         </div>
         <div class="row col">
           <span class="padLeft">Date of Questionnaire:</span>
-          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
+          <span class="col input-group input-group-sm"><input type="date" class="form-control surveyInput" id="dateOfQuestionnaire" placeholder="">{{survey.dateOfQuestionnaire}}</span>
         </div>
       </div>
       <div class="row border">
         <div class="row col">
           <span class="padLeft">Requested Start Date:</span>
-          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
+          <span class="col input-group input-group-sm">{{survey.requestedStartDate}}</span>
         </div>
         <div class="row col">
           <span class="padLeft">Requested End Date:</span>
-          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
+          <span class="col input-group input-group-sm"><input id="requestedEndDate" type="date" class="form-control surveyInput" placeholder="">{{survey.requestedEndDate}}</span>
         </div>
       </div>
     </div>
@@ -72,8 +72,8 @@
               </strong>
             </span>
             <span *ngIf="!question.groupedQuestions" class="padLeft input-group-sm">
-              <input id="{{question.id}}" data-step="{{i}}" type="text" class="form-control" placeholder="{{question.questionText}}"
-                     (blur)="onBlurReplace()">
+              <input id="{{question.id}}" type="text" class="form-control" placeholder="{{question.questionText}}"
+                     (blur)="updateQuestionReply($event)" value="{{question.clientReply}}">
             </span>
           </div>
         </div>

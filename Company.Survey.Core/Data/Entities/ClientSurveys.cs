@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Company.Survey.Core.Data.Entities
 {
@@ -9,8 +8,8 @@ namespace Company.Survey.Core.Data.Entities
         public Guid ClientSurveyKey { get; set; }
         public bool IsComplete { get; set; } = false;
 
-        public DateTime RequestedStartDate { get; set; }
-        public DateTime RequestedEndDate { get; set; }
+        public DateTime? RequestedStartDate { get; set; }
+        public DateTime? RequestedEndDate { get; set; }
 
         public int ClientId { get; set; }
         public Client Client { get; set; }

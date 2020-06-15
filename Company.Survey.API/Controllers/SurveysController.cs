@@ -38,5 +38,17 @@ namespace Company.Survey.API.Controllers
             if (survey == null) return NotFound();
             return Ok(new SurveyViewModel(survey.ClientSurveys.Single()));
         }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateSurvey(PutSurveyViewModel viewModel, [FromQuery] Guid Key)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var survey = await _context.ClientSurveys.Where(e => e.ClientSurveyKey == Key).FirstOrDefaultAsync();
+            if (survey == null) return NotFound();
+            survey.RequestedEndDate = viewModel.RequestedEndDate;
+            survey.RequestedStartDate = viewModel.RequestedStartDate;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
