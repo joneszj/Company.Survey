@@ -4,3 +4,4 @@ dal:
 		apply migrations: 
 			1 Ensure .core is selected in default project package manage console
 			2 Update-Database -StartupProject Company.Survey.API
+				- clientSurveys throws when seeding from ef, please use the sql provided to manually insert

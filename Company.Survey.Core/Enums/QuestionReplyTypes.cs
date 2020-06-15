@@ -3,6 +3,7 @@
     public enum QuestionReplyTypes
     {
         Text,
+        TextArea,
         Multiple,
         Select
     }

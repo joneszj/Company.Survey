@@ -1,5 +1,4 @@
-﻿
-using Company.Survey.Core.Comnstants;
+﻿using Company.Survey.Core.Comnstants;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

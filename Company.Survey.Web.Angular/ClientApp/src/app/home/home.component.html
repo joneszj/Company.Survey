@@ -1,0 +1,143 @@
+<div *ngIf="!notFound && !hasLoaded">
+  Loading...
+</div>
+<div *ngIf="notFound && hasLoaded">
+  This is not the survey you are looking for... 404!
+</div>
+<div *ngIf="!notFound && hasLoaded">
+  <div class="row pt-3 pb-3" id="head">
+    <div class="col">
+      <div class="row"><a href="{{survey.companySite}}">{{survey.companySite}}</a></div>
+      <div class="row">{{survey.title}}</div>
+    </div>
+    <div class="col">
+      <div class="row">{{survey.contact}}</div>
+    </div>
+  </div>
+  <div *ngFor="let step of survey.steps; let i = index;">
+    <div class="row pt-3 pb-3">
+      <div class="col border">
+        {{step.title}}
+      </div>
+    </div>
+    <div *ngIf="i == 0">
+      <div class="row border">
+        <div class="row col input-group input-group-sm">
+          <span class="padLeft">Company Name:</span>
+          <span class="col input-group input-group-sm"><input (blur)="updateClient()" type="text" class="form-control clientInput" id="companyName" placeholder="" value="{{survey.client.companyName}}"></span>
+        </div>
+        <div class="row col">
+          <span class="padLeft">First Name:</span>
+          <span class="col input-group input-group-sm"><input (blur)="updateClient()" type="text" class="form-control clientInput" id="firstName" placeholder="" value="{{survey.client.firstName}}"></span>
+        </div>
+      </div>
+      <div class="row border">
+        <div class="row col">
+          <span class="padLeft">Phone:</span>
+          <span class="col input-group input-group-sm"><input (blur)="updateClient()" type="text" class="form-control clientInput" id="phone" placeholder="" value="{{survey.client.phone}}"></span>
+        </div>
+        <div class="row col">
+          <span class="padLeft">Last Name:</span>
+          <span class="col input-group input-group-sm"><input (blur)="updateClient()" type="text" class="form-control clientInput" id="lastName" placeholder="" value="{{survey.client.lastName}}"></span>
+        </div>
+      </div>
+      <div class="row border">
+        <div class="row col">
+          <span class="padLeft">Email:</span>
+          <span class="col input-group input-group-sm"><input (blur)="updateClient()" type="text" class="form-control clientInput" id="email" placeholder="" value="{{survey.client.email}}"></span>
+        </div>
+        <div class="row col">
+          <span class="padLeft">Date of Questionnaire:</span>
+          <span class="col input-group input-group-sm"><input disabled value="{{survey.dateOfQuestionnaire}}" type="date" class="form-control surveyInput" id="dateOfQuestionnaire" placeholder=""></span>
+        </div>
+      </div>
+      <div class="row border">
+        <div class="row col">
+          <span class="padLeft">Requested Start Date:</span>
+          <span class="col input-group input-group-sm"><input (blur)="updateSurvey()" value="{{survey.requestedStartDate}}" id="requestedStartDate" type="date" class="form-control surveyInput"></span>
+        </div>
+        <div class="row col">
+          <span class="padLeft">Requested End Date:</span>
+          <span class="col input-group input-group-sm"><input (blur)="updateSurvey()" value="{{survey.requestedEndDate}}" id="requestedEndDate" type="date" class="form-control surveyInput" placeholder=""></span>
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let question of step.questions">
+      <div *ngIf="question">
+        <div class="row pt-2">
+          <div class="row col lessFontSize">
+            <span class="padLeft">
+              <strong>
+                <u>{{question.quesitonText}}</u>
+              </strong>
+            </span>
+            <span *ngIf="!question.groupedQuestions" class="padLeft input-group-sm">
+              <input id="{{question.id}}" type="text" class="form-control" placeholder="{{question.questionText}}"
+                     (blur)="updateQuestionReply($event)" value="{{question.clientReply}}">
+            </span>
+          </div>
+        </div>
+        <div class="row pb-2 pb-1" *ngIf="question.note">
+          <div class="col"><em>{{question.note}}</em></div>
+        </div>
+        <div *ngIf="question.groupedQuestions && question.groupedQuestions.length">
+          <table class="table pt-1">
+            <thead>
+              <tr>
+                <th class="border align-top" scope="col" *ngFor="let groupQuestion of question.groupedQuestions">
+                  {{groupQuestion.quesitonText}}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- has replies -->
+              <tr class="border align-top" *ngFor="let reply of question.groupedQuestions[0].groupedReplies; let y = index">
+                <td *ngFor="let groupQuestion of question.groupedQuestions; let x = index" class="border noPad" style="padding:2px;">
+                  <span *ngIf="question.groupedQuestions[x] && question.groupedQuestions[x].groupedReplies[y]">
+                    <input id="{{groupQuestion.id}}"
+                           [attr.data-replyindex]="y"
+                           [attr.data-isnew]="false"
+                           type="text"
+                           class="form-control"
+                           (blur)="updateQuestionReply($event)"
+                           value="{{question.groupedQuestions[x].groupedReplies[y]}}" />
+                  </span>
+                  <span *ngIf="!(question.groupedQuestions[x] && question.groupedQuestions[x].groupedReplies[y])">
+                    <input id="{{groupQuestion.id}}"
+                           [attr.data-replyindex]="y"
+                           [attr.data-isnew]="true"
+                           type="text"
+                           class="form-control"
+                           (blur)="updateQuestionReply($event)" />
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <!-- TODO: dynamically add new rows -->
+                <td *ngFor="let groupQuestion of question.groupedQuestions; let x = index" class="border noPad" style="padding:2px;">
+                  <span>
+                    <input id="{{groupQuestion.id}}"
+                           [attr.data-replyindex]="0"
+                           [attr.data-isnew]="true"
+                           type="text"
+                           class="form-control"
+                           (blur)="updateQuestionReply($event)" />
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>
+                  <button type="button" class="btn btn-primary" (click)="addNewRow($event)">
+                    Add Row
+                  </button>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
