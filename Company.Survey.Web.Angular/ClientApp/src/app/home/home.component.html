@@ -15,71 +15,89 @@
     </div>
   </div>
   <div *ngFor="let step of survey.steps; let i = index;">
-    <!-- step -->
     <div class="row pt-3 pb-3">
       <div class="col border">
         {{step.title}}
       </div>
     </div>
-    <!-- universal survey questions -->
     <div *ngIf="i == 0">
       <div class="row border">
-        <div class="col">
-          <span>Company Name:</span>
+        <div class="row col input-group input-group-sm">
+          <span class="padLeft">Company Name:</span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
         </div>
-        <div class="col">
-          <span>First Name:</span>
-        </div>
-      </div>
-      <div class="row border">
-        <div class="col">
-          <span>Phone:</span>
-        </div>
-        <div class="col">
-          <span>Last Name:</span>
+        <div class="row col">
+          <span class="padLeft">First Name:</span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
         </div>
       </div>
       <div class="row border">
-        <div class="col">
-          <span>Email:</span>
+        <div class="row col">
+          <span class="padLeft">Phone:</span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
         </div>
-        <div class="col">
-          <span>Date of Questionnaire:</span>
+        <div class="row col">
+          <span class="padLeft">Last Name:</span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
         </div>
       </div>
       <div class="row border">
-        <div class="col">
-          <span>Requested Start Date:</span>
+        <div class="row col">
+          <span class="padLeft">Email:</span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
         </div>
-        <div class="col">
-          <span>Requested End Date:</span>
+        <div class="row col">
+          <span class="padLeft">Date of Questionnaire:</span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
+        </div>
+      </div>
+      <div class="row border">
+        <div class="row col">
+          <span class="padLeft">Requested Start Date:</span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
+        </div>
+        <div class="row col">
+          <span class="padLeft">Requested End Date:</span>
+          <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder=""></span>
         </div>
       </div>
     </div>
-    <!-- render items -->
-    <div *ngFor="let item of step.renderItems">
-      <!-- group -->
-      <div *ngIf="item.groupKey">
-        <table class="table">
-          <thead *ngFor="item.group"></thead>
-        </table>
-      </div>
-      <div *ngIf="!item.groupKey">
-        <!-- question -->
-        <div *ngIf="item.question">
-          <!-- row -->
-          <div class="row underline bold" *ngIf="item.question.renderAs === 'Row'">
-            <div class="col"><strong><u>{{item.question.title}}</u></strong></div>
-          </div>
-          <div class="row" *ngIf="item.question.note">
-            <div class="col"><em>{{item.question.note}}</em></div>
+    <div *ngFor="let question of step.questions">
+      <div *ngIf="question">
+        <div class="row pt-2">
+          <div class="row col lessFontSize">
+            <span class="padLeft">
+              <strong>
+                <u>{{question.quesitonText}}</u>
+              </strong>
+            </span>
+            <span *ngIf="!question.groupedQuestions" class="padLeft input-group-sm">
+              <input id="{{question.id}}" data-step="{{i}}" type="text" class="form-control" placeholder="{{question.questionText}}"
+                     (blur)="onBlurReplace()">
+            </span>
           </div>
         </div>
-      </div>
-      <!-- content -->
-      <div class="col" *ngIf="!item.question">
-        <div class="row"><strong><u>{{item.title}}</u></strong></div>
-        <div class="row"><em>{{item.content}}</em></div>
+        <div class="row pb-2 pb-1" *ngIf="question.note">
+          <div class="col"><em>{{question.note}}</em></div>
+        </div>
+        <div *ngIf="question.groupedQuestions && question.groupedQuestions.length">
+          <table class="table pt-1">
+            <thead>
+              <tr>
+                <th class="border align-top" scope="col" *ngFor="let groupQuestion of question.groupedQuestions">
+                  {{groupQuestion.quesitonText}}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border align-top">
+                <td *ngFor="let groupQuestion of question.groupedQuestions" class="border noPad" style="padding:2px;">
+                  <span class="col input-group input-group-sm"><input type="text" class="form-control" placeholder="{{groupQuestion.quesitonText}}"></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

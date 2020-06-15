@@ -1,0 +1,11 @@
+.padLeft {
+    padding-left: 15px;
+}
+
+.noPad: {
+  padding: 0px !important;
+}
+
+.lessFontSize: {
+  font-size: 0.9rem;
+}

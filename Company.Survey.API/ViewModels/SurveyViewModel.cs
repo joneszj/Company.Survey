@@ -46,7 +46,6 @@ namespace Company.Survey.API.ViewModels
         public int Order { get; set; }
         public Content StepContent { get; set; }
         public IEnumerable<Question> Questions { get; set; }
-        public IEnumerable<Group> GroupedQuestions { get; set; }
     }
 
     public class Content

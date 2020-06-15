@@ -13,26 +13,28 @@ export interface SurveyViewModel {
 export interface Step {
   title: string;
   order: number;
-  renderItems: RenderItem[];
+  stepContent: Content;
+  questions: Question[];
 }
 
-export interface RenderItem {
+export interface Content {
   title: string;
-  order: number;
-  note: string;
-  question: Question;
-  questionsAsTable: Question[];
-  renderAs: string;
-  groupKey: string;
+  contentBlocks: string[];
 }
 
 export interface Question {
   id: number;
-  title: string;
+  quesitonText: string;
   note: string;
   order: number;
   exampleReplies: string[];
+  groupId: number | null;
   clientReply: string;
-  renderAs: string;
-  groupKey: string;
+  groupedQuestions: Question[];
+}
+
+export interface Group {
+  title: string;
+  note: string;
+  order: number;
 }
