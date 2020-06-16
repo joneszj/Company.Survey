@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{E4333DB1-A08
 		SqlSeed.sql = SqlSeed.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.Survey.Admin", "Company.Survey.Admin\Company.Survey.Admin.csproj", "{B4278B65-21A6-4FAA-9E4A-25DE7584F24A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B2F0F921-4840-47ED-89CA-C6C3301E5251}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2F0F921-4840-47ED-89CA-C6C3301E5251}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2F0F921-4840-47ED-89CA-C6C3301E5251}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4278B65-21A6-4FAA-9E4A-25DE7584F24A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4278B65-21A6-4FAA-9E4A-25DE7584F24A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4278B65-21A6-4FAA-9E4A-25DE7584F24A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4278B65-21A6-4FAA-9E4A-25DE7584F24A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
