@@ -68,16 +68,16 @@ export class HomeComponent {
 
   // TODO: really wanted this to be a debounce instead of blur, but couldn't get trailing debounce only to exectue
   updateQuestionReply = (event) => {
+    // TODO: make clear what is grouped
     if (event.target.dataset.isnew === 'true') {
       if ((event.target as HTMLInputElement).value) {
         // create group reply item
         this._http.post(`${environment.ApiBaseUrl}/reply/?key=${this._route.snapshot.paramMap.get("key")}`, {
-          surveyQuestionId: Number(event.target.id),
+          surveyQuestionId: Number(event.target.dataset.questionid),
           value: event.target.value,
           groupdIndex: Number(event.target.dataset.replyindex)
         } as PutReplyViewModel).subscribe(res => {
-          debugger;
-          event.target.id = res;
+          event.target.dataset.replyid = res;
           event.target.dataset.isnew = false;
         })
       }
@@ -85,7 +85,9 @@ export class HomeComponent {
       // TODO: add depuping gaurd
       // TODO: this is functionaing as an upsert on the backend and should be separated
       this._http.put(`${environment.ApiBaseUrl}/reply/?key=${this._route.snapshot.paramMap.get("key")}`, {
-        surveyQuestionId: Number(event.target.id),
+        id: Number(event.target.dataset.replyid),
+        surveyQuestionId: Number(event.target.dataset.questionid),
+        groupdIndex: Number(event.target.dataset.replyindex),
         value: event.target.value
       } as PutReplyViewModel).subscribe(res => console.log(res))
       // TODO: maybe add delete reply if value is empty
@@ -93,15 +95,44 @@ export class HomeComponent {
   };
 
   addNewRow = () => {
+    //TODO: make easier to read
+    function createRow(lastRow: Element, sourceRow: HTMLElement) {
+      const targetRow = lastRow.cloneNode(true);
+      const tr = (lastRow.parentElement as HTMLTableElement).insertRow(-1);
+      tr.classList.add('border');
+      tr.classList.add('noPad');
+      Array.from((targetRow as HTMLElement).querySelectorAll('input')).forEach((e: HTMLInputElement, i) => {
+        e.dataset.questionid = lastRow.querySelectorAll('input')[0].dataset.questionid;
+        e.dataset.isnew = "true";
+        e.value = "";
+        e.dataset.replyindex = String(Number(lastRow.querySelectorAll('input')[0].dataset.replyindex) + 1);
+        const span = document.createElement('span');
+        span.appendChild(e);
+        const cell = tr.insertCell(i);
+        cell.classList.add('border');
+        cell.classList.add('noPad');
+        cell.style.padding = "2px"
+        cell.appendChild(span);
+      });
+      //sourceRow.parentElement.getElementsByTagName('tbody')[0].insertBefore(targetRow, lastRow);
+    }
+
     const sourceRow = (event.target as HTMLElement).parentElement.parentElement.parentElement;
     const lastRow = sourceRow.parentElement.getElementsByTagName('tbody')[0].children[sourceRow.parentElement.getElementsByTagName('tbody')[0].children.length - 1];
-    const targetRow = lastRow.cloneNode(true);
-    Array.from(lastRow.querySelectorAll('input')).forEach((e: HTMLInputElement) => {
-      e.id = "",
-      e.dataset.isnew = "true",
-      e.value = "";
-      e.dataset.replyindex = lastRow.querySelectorAll('input')[0].dataset.replyindex + 1;
-    });
-    sourceRow.parentElement.getElementsByTagName('tbody')[0].insertBefore(targetRow, lastRow);
+
+    if (!lastRow) createRow(lastRow, sourceRow);
+    if (Array.from(lastRow.querySelectorAll('input')).filter(e => !e.value).length) {
+      alert('Please complete any missing fields before creating a new row');
+      return;
+    }
+    createRow(lastRow, sourceRow);
+  }
+
+  submit = () => {
+    this._http.post(`${environment.ApiBaseUrl}/surveys/?key=${this._route.snapshot.paramMap.get("key")}`, null).subscribe(e => {
+      Array.from(document.getElementsByTagName('input')).forEach(e => e.disabled = true);
+    })
   }
 }
+
+

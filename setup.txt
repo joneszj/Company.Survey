@@ -8,3 +8,5 @@ dal:
 	3 Set .api and .angular projects as startup projects
 
 	if you add the seed data, you can go to https://localhost:44331/joneszj@gmail.com/00000000-0000-0000-0000-000000000000 for a demo survey
+	when i ran these steps myself, I needed to start the solution once, hit a process in use error, 
+		run again hit 

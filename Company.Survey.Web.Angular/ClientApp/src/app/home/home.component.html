@@ -19,41 +19,57 @@
       <div class="row border">
         <div class="row col input-group input-group-sm">
           <span class="padLeft">Company Name:</span>
-          <span class="col input-group input-group-sm"><input (blur)="updateClient()" type="text" class="form-control clientInput" id="companyName" placeholder="" value="{{survey.client.companyName}}"></span>
+          <span class="col input-group input-group-sm">
+            <input (blur)="updateClient()" [disabled]="survey.isComplete" type="text" class="form-control clientInput" id="companyName" placeholder="" value="{{survey.client.companyName}}">
+          </span>
         </div>
         <div class="row col">
           <span class="padLeft">First Name:</span>
-          <span class="col input-group input-group-sm"><input (blur)="updateClient()" type="text" class="form-control clientInput" id="firstName" placeholder="" value="{{survey.client.firstName}}"></span>
+          <span class="col input-group input-group-sm">
+            <input (blur)="updateClient()" [disabled]="survey.isComplete" type="text" class="form-control clientInput" id="firstName" placeholder="" value="{{survey.client.firstName}}">
+          </span>
         </div>
       </div>
       <div class="row border">
         <div class="row col">
           <span class="padLeft">Phone:</span>
-          <span class="col input-group input-group-sm"><input (blur)="updateClient()" type="text" class="form-control clientInput" id="phone" placeholder="" value="{{survey.client.phone}}"></span>
+          <span class="col input-group input-group-sm">
+            <input (blur)="updateClient()" [disabled]="survey.isComplete" type="text" class="form-control clientInput" id="phone" placeholder="" value="{{survey.client.phone}}">
+          </span>
         </div>
         <div class="row col">
           <span class="padLeft">Last Name:</span>
-          <span class="col input-group input-group-sm"><input (blur)="updateClient()" type="text" class="form-control clientInput" id="lastName" placeholder="" value="{{survey.client.lastName}}"></span>
+          <span class="col input-group input-group-sm">
+            <input (blur)="updateClient()" [disabled]="survey.isComplete" type="text" class="form-control clientInput" id="lastName" placeholder="" value="{{survey.client.lastName}}">
+          </span>
         </div>
       </div>
       <div class="row border">
         <div class="row col">
           <span class="padLeft">Email:</span>
-          <span class="col input-group input-group-sm"><input (blur)="updateClient()" type="text" class="form-control clientInput" id="email" placeholder="" value="{{survey.client.email}}"></span>
+          <span class="col input-group input-group-sm">
+            <input (blur)="updateClient()" [disabled]="survey.isComplete" type="text" class="form-control clientInput" id="email" placeholder="" value="{{survey.client.email}}">
+          </span>
         </div>
         <div class="row col">
           <span class="padLeft">Date of Questionnaire:</span>
-          <span class="col input-group input-group-sm"><input disabled value="{{survey.dateOfQuestionnaire}}" type="date" class="form-control surveyInput" id="dateOfQuestionnaire" placeholder=""></span>
+          <span class="col input-group input-group-sm">
+            <input disabled value="{{survey.dateOfQuestionnaire}}" type="date" class="form-control" id="dateOfQuestionnaire">
+          </span>
         </div>
       </div>
       <div class="row border">
         <div class="row col">
           <span class="padLeft">Requested Start Date:</span>
-          <span class="col input-group input-group-sm"><input (blur)="updateSurvey()" value="{{survey.requestedStartDate}}" id="requestedStartDate" type="date" class="form-control surveyInput"></span>
+          <span class="col input-group input-group-sm">
+            <input (blur)="updateSurvey()" [disabled]="survey.isComplete" value="{{survey.requestedStartDate}}" id="requestedStartDate" type="date" class="form-control surveyInput">
+          </span>
         </div>
         <div class="row col">
           <span class="padLeft">Requested End Date:</span>
-          <span class="col input-group input-group-sm"><input (blur)="updateSurvey()" value="{{survey.requestedEndDate}}" id="requestedEndDate" type="date" class="form-control surveyInput" placeholder=""></span>
+          <span class="col input-group input-group-sm">
+            <input (blur)="updateSurvey()" [disabled]="survey.isComplete" value="{{survey.requestedEndDate}}" id="requestedEndDate" type="date" class="form-control surveyInput">
+          </span>
         </div>
       </div>
     </div>
@@ -61,8 +77,8 @@
       <div class="col border">
         {{step.title}}
         <div *ngIf="step.stepContent">
-          <div *ngFor="let content in step.stepContent.contentBlocks">
-            {{content}}
+          <div *ngFor="let content of step.stepContent.contentBlocks;">
+            <div [innerHTML]="content"></div>
           </div>
         </div>
       </div>
@@ -76,9 +92,14 @@
                 <u>{{question.quesitonText}}</u>
               </strong>
             </span>
+            <!-- single question -->
             <span *ngIf="!question.groupedQuestions" class="padLeft input-group-sm">
-              <input id="{{question.id}}" type="text" class="form-control" placeholder="{{question.questionText}}"
-                     (blur)="updateQuestionReply($event)" value="{{question.clientReply}}">
+              <input [attr.data-questionid]="question.id"
+                     type="text"
+                     class="form-control"
+                     value="{{question.clientReply}}"
+                     [disabled]="survey.isComplete"
+                     (blur)="updateQuestionReply($event)" />
             </span>
           </div>
         </div>
@@ -86,6 +107,7 @@
           <div class="col"><em>{{question.note}}</em></div>
         </div>
         <div *ngIf="question.groupedQuestions && question.groupedQuestions.length">
+          <!-- grouped questions -->
           <table class="table pt-1">
             <thead>
               <tr>
@@ -99,39 +121,44 @@
               <tr class="border align-top" *ngFor="let reply of question.groupedQuestions[0].groupedReplies; let y = index">
                 <td *ngFor="let groupQuestion of question.groupedQuestions; let x = index" class="border noPad" style="padding:2px;">
                   <span *ngIf="question.groupedQuestions[x] && question.groupedQuestions[x].groupedReplies[y]">
-                    <input id="{{groupQuestion.id}}"
+                    <input [attr.data-questionid]="groupQuestion.id"
                            [attr.data-replyindex]="y"
+                           [attr.data-replyid]="question.groupedQuestions[x] && question.groupedQuestions[x].groupedReplies[y].id"
                            [attr.data-isnew]="false"
                            type="text"
                            class="form-control"
+                           [disabled]="survey.isComplete"
                            (blur)="updateQuestionReply($event)"
-                           value="{{question.groupedQuestions[x].groupedReplies[y]}}" />
+                           value="{{question.groupedQuestions[x].groupedReplies[y].reply}}" />
                   </span>
+                  <!-- empty/missing replies -->
                   <span *ngIf="!(question.groupedQuestions[x] && question.groupedQuestions[x].groupedReplies[y])">
-                    <input id="{{groupQuestion.id}}"
+                    <input [attr.data-questionid]="groupQuestion.id"
                            [attr.data-replyindex]="y"
                            [attr.data-isnew]="true"
                            type="text"
+                           [disabled]="survey.isComplete"
                            class="form-control"
                            (blur)="updateQuestionReply($event)" />
                   </span>
                 </td>
               </tr>
-              <tr>
-                <!-- TODO: dynamically add new rows -->
-                <td *ngFor="let groupQuestion of question.groupedQuestions; let x = index" class="border noPad" style="padding:2px;">
+              <tr *ngIf="!question.groupedQuestions[0].groupedReplies.length">
+                <!-- no replies -->
+                <td *ngFor="let groupQuestion of question.groupedQuestions;" class="border noPad" style="padding:2px;">
                   <span>
-                    <input id="{{groupQuestion.id}}"
+                    <input [attr.data-questionid]="groupQuestion.id"
                            [attr.data-replyindex]="0"
                            [attr.data-isnew]="true"
                            type="text"
+                           [disabled]="survey.isComplete"
                            class="form-control"
                            (blur)="updateQuestionReply($event)" />
                   </span>
                 </td>
               </tr>
             </tbody>
-            <tfoot>
+            <tfoot *ngIf="!survey.isComplete">
               <tr>
                 <td>
                   <button type="button" class="btn btn-primary" (click)="addNewRow($event)">
@@ -141,8 +168,14 @@
               </tr>
             </tfoot>
           </table>
+          <!-- / grouped questions -->
         </div>
       </div>
     </div>
+  </div>
+  <div class="row float-right pt-3 pb-5" *ngIf="!survey.isComplete">
+    <button type="button" class="btn btn-success" (click)="submit()">
+      Complete
+    </button>
   </div>
 </div>

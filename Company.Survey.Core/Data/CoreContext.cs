@@ -20,6 +20,7 @@ namespace Company.Survey.Core.Data
         public DbSet<Entities.Survey> Surveys { get; set; }
         public DbSet<ClientSurveys> ClientSurveys { get; set; }
 
+        //TODO: applyQueryFilter
         #region helpers
         private static void BuildValueConversions(ModelBuilder modelBuilder)
         {
@@ -100,7 +101,7 @@ namespace Company.Survey.Core.Data
             {
                 Id = -1,
                 StepContentId = -1,
-                ContentData = @"<img src=\""/images/databerrymigrationprocess.jpg\"" alt=\""migration process\"">"
+                ContentData = @"<img class=""img-fluid"" src=""/assets/images/databerrymigrationprocess.jpg"" alt=""migration process"">"
             });
             modelBuilder.Entity<SurveyQuestionGroup>().HasData(new SurveyQuestionGroup[]
             {

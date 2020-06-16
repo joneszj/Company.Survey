@@ -34,8 +34,13 @@ export interface Question {
   exampleReplies: string[];
   groupId: number | null;
   clientReply: string;
-  groupedReplies: string[];
+  groupedReplies: GroupedReplies[];
   groupedQuestions: Question[];
+}
+
+export interface GroupedReplies {
+  id: number;
+  reply: string;
 }
 
 export interface Group {

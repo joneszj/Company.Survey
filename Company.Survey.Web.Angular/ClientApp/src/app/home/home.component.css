@@ -10,6 +10,10 @@
   font-size: 0.9rem;
 }
 
+td {
+    padding: 2px !important;
+}
+
 /* for printing src: https://stackoverflow.com/a/8356996 
 @media screen {
   #head {

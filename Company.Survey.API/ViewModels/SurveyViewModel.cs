@@ -1,7 +1,7 @@
 ﻿using Company.Survey.Core.Data.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
 namespace Company.Survey.API.ViewModels
 {
@@ -61,7 +61,7 @@ namespace Company.Survey.API.ViewModels
             if (stepContent != null)
             {
                 Title = stepContent.Title;
-                ContentBlocks = stepContent.ContentBlocks.Select(e => e.ContentData);
+                ContentBlocks = stepContent.ContentBlocks.Select(e => HttpUtility.UrlDecode(e.ContentData));
             }
         }
         public string Title { get; set; }
@@ -87,7 +87,7 @@ namespace Company.Survey.API.ViewModels
             ExampleReplies = question?.PossibleReplies?.Select(e => e.ReplyData);
             GroupId = question?.SurveyQuestionGroup?.Id;
             ClientReply = replies.FirstOrDefault(e => e.SurveyQuestionId == question.Id)?.ReplyData;
-            GroupedReplies = replies.OrderBy(e=>e.GroupIndex).Where(e=>e.SurveyQuestionId == question.Id)?.Select(e => e.ReplyData);
+            GroupedReplies = replies.OrderBy(e=>e.GroupIndex).Where(e=>e.SurveyQuestionId == question.Id)?.Select(e => new GroupedReply { Id = e.Id, Reply = e.ReplyData });
         }
 
         public int Id { get; set; }
@@ -97,8 +97,14 @@ namespace Company.Survey.API.ViewModels
         public IEnumerable<string> ExampleReplies { get; set; }
         public int? GroupId { get; set; }
         public string ClientReply { get; set; }
-        public IEnumerable<string> GroupedReplies { get; set; }
+        public IEnumerable<GroupedReply> GroupedReplies { get; set; }
         public IEnumerable<Question> GroupedQuestions { get; set; }
+    }
+
+    public class GroupedReply
+    {
+        public int Id { get; set; }
+        public string Reply { get; set; }
     }
 
     public class Group

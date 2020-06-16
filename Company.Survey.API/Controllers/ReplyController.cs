@@ -39,11 +39,24 @@ namespace Company.Survey.API.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateReply([FromBody] PutPostReplyViewModel viewModel, [FromQuery] Guid Key)
         {
-            // TODO: this should really be individual actions
-            var clientSurvey = await _context.ClientSurveys.Where(e => e.ClientSurveyKey == Key)
-                .Include(e => e.ClientQuestionReplies)
-                .FirstOrDefaultAsync();
-            var reply = clientSurvey.ClientQuestionReplies.FirstOrDefault(e => e.SurveyQuestionId == viewModel.SurveyQuestionId);
+            Reply reply;
+            ClientSurveys clientSurvey;
+            if (viewModel.GroupdIndex.HasValue)
+            {
+                // TODO: this should really be individual actions
+                clientSurvey = await _context.ClientSurveys.Where(e => e.ClientSurveyKey == Key)
+                    .Include(e => e.ClientQuestionReplies)
+                    .FirstOrDefaultAsync();
+                reply = clientSurvey.ClientQuestionReplies.FirstOrDefault(e => e.Id == viewModel.Id);
+            } else
+            {
+                // TODO: this should really be individual actions
+                clientSurvey = await _context.ClientSurveys.Where(e => e.ClientSurveyKey == Key)
+                    .Include(e => e.ClientQuestionReplies)
+                    .FirstOrDefaultAsync();
+                reply = clientSurvey.ClientQuestionReplies.FirstOrDefault(e => e.SurveyQuestionId == viewModel.SurveyQuestionId);
+            }
+
             if (reply != null)
             {
                 reply.ReplyData = viewModel.Value;

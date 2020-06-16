@@ -33,6 +33,11 @@ namespace Company.Survey.API.Controllers
                                 .ThenInclude(e => e.SurveyGroupQuestions)
                 .Include(e => e.ClientSurveys.Where(e => e.ClientSurveyKey == Key))
                         .ThenInclude(e => e.ClientQuestionReplies)
+                .Include(e => e.ClientSurveys.Where(e => e.ClientSurveyKey == Key))
+                    .ThenInclude(e=>e.Survey)
+                        .ThenInclude(e=>e.SurveySteps)
+                            .ThenInclude(e=>e.StepContent)
+                                .ThenInclude(e=>e.ContentBlocks)
                 .FirstOrDefaultAsync();
 
             if (survey == null) return NotFound();
@@ -50,6 +55,16 @@ namespace Company.Survey.API.Controllers
             if (survey == null) return NotFound();
             survey.RequestedEndDate = end;
             survey.RequestedStartDate = start;
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CompleteSurvey([FromQuery] Guid Key)
+        {
+            var clientSurvey = await _context.ClientSurveys.FirstOrDefaultAsync(e => e.ClientSurveyKey == Key);
+            if (clientSurvey == null) return NotFound();
+            clientSurvey.IsComplete = true;
             await _context.SaveChangesAsync();
             return Ok();
         }
