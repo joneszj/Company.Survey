@@ -56,11 +56,11 @@ namespace Company.Survey.Core.Data
         }
         private static void BuildMappings(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Entities.Survey>().HasIndex(e => new { e.SuveryId, e.Version }).IsUnique(true);
+            modelBuilder.Entity<Entities.Survey>().HasIndex(e => new { e.Id, e.Version }).IsUnique(true);
             modelBuilder.Entity<SurveyStep>()
                 .HasOne(e => e.Survey)
                 .WithMany(e => e.SurveySteps)
-                .HasPrincipalKey(e => new { e.SuveryId, e.Version })
+                .HasPrincipalKey(e => new { e.Id, e.Version })
                 .HasForeignKey(e => new { e.SurveyId, e.SurveyVersion });
         }
         private static void SeedDatabase(ModelBuilder modelBuilder)
@@ -72,7 +72,6 @@ namespace Company.Survey.Core.Data
                 // seed does not recognize identity when set on property so we must set it manually
                 // ef core recomends negative values to prevent conflict of seeded and non-seeded data
                 Id = -1,
-                SuveryId = -1,
                 Version = Version,
                 CompanyName = CompanyName,
                 CompanySite = "www.databerry.com",
@@ -503,24 +502,27 @@ namespace Company.Survey.Core.Data
                     Order = 4,
                 }
             });
-            // TODO: I dont understand why this fails to seed
-            //modelBuilder.Entity<ClientSurveys>().HasData(new ClientSurveys
-            //{
-            //    Id = -1,
-            //    ClientSurveyKey = Guid.Empty,
-            //    ClientId = -1,
-            //    SurveyId = -1
-            //});
-            //modelBuilder.Entity<Reply>().HasData(new[]
-            //{
-            //    new Reply
-            //    {
-            //        Id = -62,
-            //        ClientSurveyId = -1,
-            //        SurveyQuestionId = -1,
-            //        ReplyData = "Azure"
-            //    }
-            //});
+            modelBuilder.Entity<ClientSurveys>().HasData(new ClientSurveys
+            {
+                Id = -1,
+                ClientSurveyKey = Guid.Empty,
+                ClientId = -1,
+                SurveyId = -1,
+                IsComplete = false,
+                RequestedEndDate = null,
+                RequestedStartDate = null
+            });
+            modelBuilder.Entity<Reply>().HasData(new[]
+            {
+                new Reply
+                {
+                    Id = -1,
+                    ClientSurveyId = -1,
+                    SurveyQuestionId = -1,
+                    ReplyData = "Azure",
+                    GroupIndex = null
+                }
+            });
         }
         #endregion
     }

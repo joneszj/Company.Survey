@@ -96,7 +96,7 @@ export class HomeComponent {
 
   addNewRow = () => {
     //TODO: make easier to read
-    function createRow(lastRow: Element, sourceRow: HTMLElement) {
+    function createRow(lastRow: Element) {
       const targetRow = lastRow.cloneNode(true);
       const tr = (lastRow.parentElement as HTMLTableElement).insertRow(-1);
       tr.classList.add('border');
@@ -120,16 +120,16 @@ export class HomeComponent {
     const sourceRow = (event.target as HTMLElement).parentElement.parentElement.parentElement;
     const lastRow = sourceRow.parentElement.getElementsByTagName('tbody')[0].children[sourceRow.parentElement.getElementsByTagName('tbody')[0].children.length - 1];
 
-    if (!lastRow) createRow(lastRow, sourceRow);
+    if (!lastRow) createRow(lastRow);
     if (Array.from(lastRow.querySelectorAll('input')).filter(e => !e.value).length) {
       alert('Please complete any missing fields before creating a new row');
       return;
     }
-    createRow(lastRow, sourceRow);
+    createRow(lastRow);
   }
 
   submit = () => {
-    this._http.post(`${environment.ApiBaseUrl}/surveys/?key=${this._route.snapshot.paramMap.get("key")}`, null).subscribe(e => {
+    this._http.post(`${environment.ApiBaseUrl}/surveys/?key=${this._route.snapshot.paramMap.get("key")}`, null).subscribe(() => {
       Array.from(document.getElementsByTagName('input')).forEach(e => e.disabled = true);
     })
   }
