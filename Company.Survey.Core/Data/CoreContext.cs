@@ -2,6 +2,9 @@
 using Company.Survey.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Company.Survey.Core.Data
 {
@@ -10,8 +13,11 @@ namespace Company.Survey.Core.Data
         public CoreContext() { }
         public CoreContext(DbContextOptions<CoreContext> options) : base(options) { }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Client>().HasQueryFilter(p => p.IsActive);
+
             base.OnModelCreating(modelBuilder);
             BuildValueConversions(modelBuilder);
             BuildMappings(modelBuilder);
@@ -21,7 +27,23 @@ namespace Company.Survey.Core.Data
         public DbSet<Entities.Survey> Surveys { get; set; }
         public DbSet<ClientSurveys> ClientSurveys { get; set; }
 
-        //TODO: applyQueryFilter
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            ChangeTracker.DetectChanges();
+
+            var markedAsDeleted = ChangeTracker.Entries().Where(x => x.State == EntityState.Deleted);
+
+            foreach (var item in markedAsDeleted)
+            {
+                if (item.Entity is CoreBase entity)
+                {
+                    item.State = EntityState.Unchanged;
+                    entity.IsActive = false;
+                }
+            }
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
         #region helpers
         private static void BuildValueConversions(ModelBuilder modelBuilder)
         {
