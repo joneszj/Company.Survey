@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Company.Survey.Core.Data;
 using Company.Survey.Core.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Company.Survey.Admin.Controllers
 {
+    [Authorize]
     public class ClientsController : Controller
     {
         private readonly CoreContext _context;
