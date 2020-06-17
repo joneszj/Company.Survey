@@ -7,7 +7,8 @@ namespace Company.Survey.Core.Data
 {
     public class CoreContext : DbContext
     {
-        public CoreContext(DbContextOptions options) : base(options) { }
+        public CoreContext() { }
+        public CoreContext(DbContextOptions<CoreContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,3 +1,4 @@
+requires .net 5.0 https://dotnet.microsoft.com/download/dotnet/5.0
 build solution
 dal:
 	0 connection string defaults to localdb with a db called CompanySurveyCore so ensure localdb is active and db CompanySurveyCore exists (ef should create it on the update-database command)
