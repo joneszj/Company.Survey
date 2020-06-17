@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Company.Survey.Admin.Controllers
 {
@@ -14,14 +15,15 @@ namespace Company.Survey.Admin.Controllers
             _context = context;
         }
 
-        public ActionResult Details(int surveyId)
+        public async Task<ActionResult> Edit([FromRoute] int id)
         {
-            var questionnaire = _context.Surveys.Where(e => e.Id == surveyId)
+            var questionnaire = await _context.Surveys.Where(e => e.Id == id)
                 .Include(e=>e.SurveySteps)
                     .ThenInclude(e=>e.QuestionGroups)
                 .Include(e=>e.SurveySteps)
-                    .ThenInclude(e=>e.Questions);
-            return View("Questionnaire/Edit", questionnaire);
+                    .ThenInclude(e=>e.Questions)
+                .FirstOrDefaultAsync();
+            return View("Edit", questionnaire);
         }
     }
 }

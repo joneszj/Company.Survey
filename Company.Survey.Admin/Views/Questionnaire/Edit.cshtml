@@ -1,11 +1,12 @@
 ﻿@model Company.Survey.Core.Data.Entities.Survey
 
 @{
-    Layout = "./Shared/_Layout";
+    Layout = "_Layout";
     ViewData["Title"] = "Edit Questionnaire";
 }
 
-<h1>Edit Questionnaire (Survey Id: @Model.Id Title: @Model.Title)</h1>
+<h1>Edit Questionnaire</h1>
+<h2>Survey Id: @Model.Id Title: @Model.Title</h2>
 
 <div class="row">
     <div class="col">
@@ -27,6 +28,7 @@
                 <div class="col">
                     @foreach (var question in step.Questions)
                     {
+                    <div class="border">
                         <div class="row">
                             <div class="col">
                                 ...question details
@@ -37,12 +39,14 @@
                                 ...remove qeustion
                             </div>
                         </div>
+                    </div>
                     }
                 </div>
             </div>
             <div>
                 ...remove step
             </div>
+            <hr />
         }
     </div>
 </div>
