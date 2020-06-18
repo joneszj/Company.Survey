@@ -7,4 +7,9 @@ dal:
 	2 Update-Database -StartupProject Company.Survey.API
 	3 Set .api .angular and .admin projects as startup projects
 
+admin:
+	0 Ensure .admin is selected in default project package manage console
+	1 Update-Database
+		- this is required for building the EF auth scaffolding
+	
 	you can go to https://localhost:44331/joneszj@gmail.com/00000000-0000-0000-0000-000000000000 for a demo survey
