@@ -27,6 +27,9 @@ namespace Company.Survey.Admin.Controllers
                     .ThenInclude(e => e.StepContent)
                         .ThenInclude(e => e.ContentBlocks)
                 .FirstOrDefaultAsync();
+
+            ViewBag.ClientSurveyCount = await _context.ClientSurveys.Where(e => e.SurveyId == id).CountAsync();
+
             return View("Edit", questionnaire);
         }
 
