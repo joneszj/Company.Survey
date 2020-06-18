@@ -17,6 +17,10 @@ namespace Company.Survey.Core.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Client>().HasQueryFilter(p => p.IsActive);
+            modelBuilder.Entity<Entities.Survey>().HasQueryFilter(p => p.IsActive);
+            modelBuilder.Entity<SurveyQuestion>().HasQueryFilter(p => p.IsActive);
+            modelBuilder.Entity<SurveyStep>().HasQueryFilter(p => p.IsActive);
+            modelBuilder.Entity<Content>().HasQueryFilter(p => p.IsActive);
 
             base.OnModelCreating(modelBuilder);
             BuildValueConversions(modelBuilder);
@@ -96,7 +100,7 @@ namespace Company.Survey.Core.Data
                         Id = -1,
                         SurveyId = -1,
                         SurveyVersion = Version,
-                        Title = "Organization/Company &amp; Primary Contact Details: Step A",
+                        Title = "Organization/Company & Primary Contact Details: Step A",
                         Order = 0
                     },
                     new SurveyStep {
@@ -169,7 +173,7 @@ namespace Company.Survey.Core.Data
                     Id = -5,
                     SurveyStepId = -2,
                     ReplyType = QuestionReplyTypes.Text,
-                    Quesiton = "Custom Applications, Applications, Frameworks, | Versions? Please list all Applications types/versions &amp; Names ?",
+                    Quesiton = "Custom Applications, Applications, Frameworks, | Versions? Please list all Applications types/versions & Names ?",
                     Note = "(e.g. .NET 4.5 | PHP 5.4 | Java 1.5)",
                     Order = 6
                 },
@@ -231,7 +235,7 @@ namespace Company.Survey.Core.Data
                     Id = -12,
                     SurveyStepId = -2,
                     ReplyType = QuestionReplyTypes.Text,
-                    Quesiton = "List existing Web Server platform &amp; Versions?",
+                    Quesiton = "List existing Web Server platform & Versions?",
                     Note = "(e.g. IIS 7.0, Apache 2.2, Nginx 1.1)",
                     Order = 14
                 },
@@ -304,7 +308,7 @@ namespace Company.Survey.Core.Data
                 {
                     Id = -41,
                     SurveyStepId = -2,
-                    Quesiton = "Are there any SSL certificate(s) installed (Type &amp; Location If possible)?",
+                    Quesiton = "Are there any SSL certificate(s) installed (Type & Location If possible)?",
                     Order = 10,
                     Note = "(if Yes please List)"
                 },
@@ -312,7 +316,7 @@ namespace Company.Survey.Core.Data
                 {
                     Id = -42,
                     SurveyStepId = -2,
-                    Quesiton = "List the number of Website Names (&amp; Location on Servers if possible)?",
+                    Quesiton = "List the number of Website Names (& Location on Servers if possible)?",
                     Order = 13
                 },
                 new SurveyQuestion
@@ -381,7 +385,7 @@ namespace Company.Survey.Core.Data
                     Id = -21,
                     SurveyStepId = -2,
                     ParentSurveyQuestionId = -40,
-                    Quesiton = "DB Engine Type &amp; Version",
+                    Quesiton = "DB Engine Type & Version",
                     ReplyType = QuestionReplyTypes.Text,
                     Order = 1
                 },
