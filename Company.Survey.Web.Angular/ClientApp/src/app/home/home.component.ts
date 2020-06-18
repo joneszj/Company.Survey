@@ -96,16 +96,17 @@ export class HomeComponent {
 
   addNewRow = () => {
     //TODO: make easier to read
-    function createRow(lastRow: Element) {
+    const createRow = (lastRow: Element) => {
       const targetRow = lastRow.cloneNode(true);
       const tr = (lastRow.parentElement as HTMLTableElement).insertRow(-1);
       tr.classList.add('border');
       tr.classList.add('noPad');
       Array.from((targetRow as HTMLElement).querySelectorAll('input')).forEach((e: HTMLInputElement, i) => {
-        e.dataset.questionid = lastRow.querySelectorAll('input')[0].dataset.questionid;
+        e.dataset.questionid = lastRow.querySelectorAll('input')[i].dataset.questionid;
         e.dataset.isnew = "true";
         e.value = "";
         e.dataset.replyindex = String(Number(lastRow.querySelectorAll('input')[0].dataset.replyindex) + 1);
+        e.addEventListener('blur', this.updateQuestionReply, false)
         const span = document.createElement('span');
         span.appendChild(e);
         const cell = tr.insertCell(i);

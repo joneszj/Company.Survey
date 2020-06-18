@@ -41,10 +41,9 @@ namespace Company.Survey.API.ViewModels
             Title = step.Title;
             Order = step.Order;
             StepContent = new Content(step.StepContent);
-            Questions = step.Questions.Where(e=>e.SurveyQuestionGroupID == null)
+            Questions = step.Questions.Where(e=>e.ParentSurveyQuestionId == null)
                 .Select(question => new Question(question, replies))
-                .Concat(step.QuestionGroups.Select(g => new Question(g, replies)))
-                .OrderBy(e=>e.Order);
+                .OrderBy(e => e.Order);
         }
 
         public int Id { get; set; }
@@ -70,14 +69,6 @@ namespace Company.Survey.API.ViewModels
 
     public class Question
     {
-        public Question(SurveyQuestionGroup g, ICollection<Reply> replies)
-        {
-            Order = g.Order;
-            QuesitonText = g.Title;
-            GroupedQuestions = g.SurveyGroupQuestions.OrderBy(e => e.Order)
-                .Select(e => new Question(e, replies));
-        }
-
         public Question(SurveyQuestion question, ICollection<Reply> replies)
         {
             Id = question.Id;
@@ -85,7 +76,8 @@ namespace Company.Survey.API.ViewModels
             Note = question.Note;
             Order = question.Order;
             ExampleReplies = question?.PossibleReplies?.Select(e => e.ReplyData);
-            GroupId = question?.SurveyQuestionGroup?.Id;
+            GroupId = question.ParentSurveyQuestionId;
+            GroupedQuestions = question.SurveyQuestions?.Select(e => new Question(e, replies)).OrderBy(e=>e.Order);
             ClientReply = replies.FirstOrDefault(e => e.SurveyQuestionId == question.Id)?.ReplyData;
             GroupedReplies = replies.OrderBy(e=>e.GroupIndex).Where(e=>e.SurveyQuestionId == question.Id)?.Select(e => new GroupedReply { Id = e.Id, Reply = e.ReplyData });
         }
@@ -105,19 +97,5 @@ namespace Company.Survey.API.ViewModels
     {
         public int Id { get; set; }
         public string Reply { get; set; }
-    }
-
-    public class Group
-    {
-        public Group(SurveyQuestionGroup group)
-        {
-            Title = group.Title;
-            Note = group.Note;
-            Order = group.Order;
-        }
-
-        public string Title { get; set; }
-        public string Note { get; set; }
-        public int Order { get; set; }
     }
 }

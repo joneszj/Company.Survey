@@ -15,7 +15,8 @@ namespace Company.Survey.Core.Data.Entities
         public ICollection<Reply> PossibleReplies { get; set; }
         public int SurveyStepId { get; set; }
         public SurveyStep SurveyStep { get; set; }
-        public int? SurveyQuestionGroupID { get; set; }
-        public SurveyQuestionGroup SurveyQuestionGroup { get; set; }
+        public int? ParentSurveyQuestionId { get; set; }
+        public SurveyQuestion ParentSurveyQuestion { get; set; }
+        public ICollection<SurveyQuestion> SurveyQuestions { get; set; }
     }
 }

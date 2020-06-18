@@ -25,12 +25,8 @@ namespace Company.Survey.API.Controllers
                     .ThenInclude(e => e.Survey)
                         .ThenInclude(e => e.SurveySteps)
                             .ThenInclude(e => e.Questions)
+                                .ThenInclude(e=>e.SurveyQuestions)
                 // EF 5 preview feature https://docs.microsoft.com/en-us/ef/core/querying/related-data#filtered-include
-                .Include(e => e.ClientSurveys.Where(e => e.ClientSurveyKey == Key))
-                    .ThenInclude(e => e.Survey)
-                        .ThenInclude(e => e.SurveySteps)
-                            .ThenInclude(e => e.QuestionGroups)
-                                .ThenInclude(e => e.SurveyGroupQuestions)
                 .Include(e => e.ClientSurveys.Where(e => e.ClientSurveyKey == Key))
                         .ThenInclude(e => e.ClientQuestionReplies)
                 .Include(e => e.ClientSurveys.Where(e => e.ClientSurveyKey == Key))

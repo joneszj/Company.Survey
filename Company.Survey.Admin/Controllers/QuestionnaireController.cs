@@ -19,8 +19,6 @@ namespace Company.Survey.Admin.Controllers
         {
             var questionnaire = await _context.Surveys.Where(e => e.Id == id)
                 .Include(e=>e.SurveySteps)
-                    .ThenInclude(e=>e.QuestionGroups)
-                .Include(e=>e.SurveySteps)
                     .ThenInclude(e=>e.Questions)
                 .FirstOrDefaultAsync();
             return View("Edit", questionnaire);
