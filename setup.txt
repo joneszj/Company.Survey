@@ -5,6 +5,15 @@ dal:
 		else change connection string
 	1 Ensure .core is selected in default project package manage console
 	2 Update-Database -StartupProject Company.Survey.API
-	3 Set .api .angular and .admin projects as startup projects
 
+admin:
+	0 Ensure .admin is selected in default project package manage console
+	1 Update-Database -Context "ApplicationDbContext"
+		- this is required for building the EF auth scaffolding
+	
+final:
+	0 Set .api .angular and .admin projects as startup projects
+		- after registering a user go into the CompanySurveyAdmin db and flag the AspNetUsers.EmailConfirmed column to true for that user to be able to login
+	
 	you can go to https://localhost:44331/joneszj@gmail.com/00000000-0000-0000-0000-000000000000 for a demo survey
+	you can go to https://localhost:44306/ for the admin portal

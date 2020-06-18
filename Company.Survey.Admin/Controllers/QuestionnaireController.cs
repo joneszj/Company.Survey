@@ -30,8 +30,7 @@ namespace Company.Survey.Admin.Controllers
             return View("Edit", questionnaire);
         }
 
-        // create new version
-        public async Task<ActionResult> NewVersion([FromRoute] int id)
+        public async Task<ActionResult> NewVersion([FromRoute] int id, [FromQuery] string key)
         {
             var questionnaire = await _context.Surveys.Where(e => e.Id == id)
                 .AsNoTracking()
@@ -43,7 +42,9 @@ namespace Company.Survey.Admin.Controllers
                         .ThenInclude(e => e.ContentBlocks)
                 .FirstOrDefaultAsync();
 
-            questionnaire.Version++;
+            var latestVersionvalue = await _context.Surveys.AsNoTracking().Where(e => e.SurveyKey == key).OrderByDescending(e => e.Version).Select(e => e.Version).FirstOrDefaultAsync();
+
+            questionnaire.Version = ++latestVersionvalue;
             questionnaire.Id = 0;
             questionnaire.SurveySteps.ToList().ForEach(step =>
             {
@@ -56,19 +57,25 @@ namespace Company.Survey.Admin.Controllers
                     {
                         child.Id = 0;
                         child.SurveyStep = step;
-                        child.ParentSurveyQuestionId = 0;
-                        child.ParentSurveyQuestionId = parent.Id;
+                        child.ParentSurveyQuestion = parent;
                     });
                 });
-                if (step.StepContent != null) step.StepContent.Id = 0;
-                step.StepContent?.ContentBlocks?.ToList().ForEach(block => block.Id = 0);
+                if (step.StepContent != null) 
+                {
+                    step.StepContent.Id = 0;
+                    step.StepContent?.ContentBlocks?.ToList().ForEach(block =>
+                    {
+                        block.StepContent = step.StepContent;
+                        block.Id = 0;
+                    });
+                };
             });
 
             await _context.AddAsync(questionnaire);
             await _context.SaveChangesAsync();
             return RedirectToAction("Edit", new { id = questionnaire.Id });
         }
-        // disable current version
+
         public async Task<ActionResult> DisableSurvey([FromRoute] int id)
         {
             var questionnaire = await _context.Surveys.Where(e => e.Id == id)

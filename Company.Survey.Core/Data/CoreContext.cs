@@ -67,6 +67,7 @@ namespace Company.Survey.Core.Data
                 .HasPrincipalKey(e => new { e.Id, e.Version })
                 .HasForeignKey(e => new { e.SurveyId, e.SurveyVersion });
             modelBuilder.Entity<SurveyQuestion>().HasOne(e=>e.ParentSurveyQuestion).WithMany(e=>e.SurveyQuestions);
+            modelBuilder.Entity<Entities.Survey>().HasIndex("SurveyKey", "Version").IsUnique();
         }
         private static void SeedDatabase(ModelBuilder modelBuilder)
         {
@@ -82,8 +83,9 @@ namespace Company.Survey.Core.Data
                 CompanySite = "www.databerry.com",
                 ContactTitle = "Phone",
                 ContactPhone = "855-350-0707",
-                Title = $"Infrastructure Migration Survey Form V{Version}",
+                Title = $"Infrastructure Migration Survey Form",
                 DateOfQuestionnaire = DateTime.Today,
+                SurveyKey = "Infrastructure Migration"
             });
             modelBuilder.Entity<Client>().HasData(new Client
             {
