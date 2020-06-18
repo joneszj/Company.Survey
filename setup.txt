@@ -11,5 +11,6 @@ admin:
 	0 Ensure .admin is selected in default project package manage console
 	1 Update-Database
 		- this is required for building the EF auth scaffolding
+		- after registering a user go into the CompanySurveyAdmin db and flag the AspNetUsers.EmailConfirmed column to true for that user to be able to login
 	
 	you can go to https://localhost:44331/joneszj@gmail.com/00000000-0000-0000-0000-000000000000 for a demo survey
