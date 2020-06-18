@@ -62,6 +62,7 @@ namespace Company.Survey.Core.Data
                 .WithMany(e => e.SurveySteps)
                 .HasPrincipalKey(e => new { e.Id, e.Version })
                 .HasForeignKey(e => new { e.SurveyId, e.SurveyVersion });
+            modelBuilder.Entity<SurveyQuestion>().HasOne(e=>e.ParentSurveyQuestion).WithMany(e=>e.SurveyQuestions);
         }
         private static void SeedDatabase(ModelBuilder modelBuilder)
         {
@@ -124,46 +125,6 @@ namespace Company.Survey.Core.Data
                 Id = -1,
                 StepContentId = -1,
                 ContentData = @"<img class=""img-fluid"" src=""/assets/images/databerrymigrationprocess.jpg"" alt=""migration process"">"
-            });
-            modelBuilder.Entity<SurveyQuestionGroup>().HasData(new SurveyQuestionGroup[]
-            {
-                new SurveyQuestionGroup
-                {
-                    Id = -1,
-                    SurveyStepId = -2,
-                    Title = "Specify the number of Source Server(s) to be migrated, Type, OS, Storage, State?",
-                    Order = 1
-                },
-                new SurveyQuestionGroup
-                {
-                    Id = -2,
-                    SurveyStepId = -2,
-                    Title = "Specify the Database Engine Server(s) Type | Version | Name | Size | Quantity?",
-                    Order = 4,
-                    Note = "(e.g. Microsoft SQL 2014, MariaDB 5.6, MySQL 5.4, Name of DB, size of DB, MB’s, GB’s, TB’s)",
-                },
-                new SurveyQuestionGroup
-                {
-                    Id = -3,
-                    SurveyStepId = -2,
-                    Title = "Are there any SSL certificate(s) installed (Type &amp; Location If possible)?",
-                    Order = 10,
-                    Note = "(if Yes please List)"
-                },
-                new SurveyQuestionGroup
-                {
-                    Id = -4,
-                    SurveyStepId = -2,
-                    Title = "List the number of Website Names (&amp; Location on Servers if possible)?",
-                    Order = 13
-                },
-                new SurveyQuestionGroup
-                {
-                    Id = -5,
-                    SurveyStepId = -3,
-                    Title = "Specify the number of Source Server(s) to be migrated, Type, OS, Storage, State?",
-                    Order = 1
-                }
             });
             modelBuilder.Entity<SurveyQuestion>().HasData(new SurveyQuestion[]
             {
@@ -294,184 +255,6 @@ namespace Company.Survey.Core.Data
                 },
                 new SurveyQuestion
                 {
-                    Id = -15,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -1,
-                    Quesiton = "Name of Server",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 0
-                },
-                new SurveyQuestion
-                {
-                    Id = -16,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -1,
-                    Quesiton = "Describe the Type of Server",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 1,
-                },
-                new SurveyQuestion
-                {
-                    Id = -17,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -1,
-                    Quesiton = "OS Type & Version",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 2
-                },
-                new SurveyQuestion
-                {
-                    Id = -18,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -1,
-                    Quesiton = "Total Storage of Server in (GB'S TB'S) & amp; Partitions",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 3
-                },
-                new SurveyQuestion
-                {
-                    Id = -19,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -1,
-                    Quesiton = "State of Server (Physical, Virtual, Hyper-Visor)",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 4
-                },
-                new SurveyQuestion
-                {
-                    Id = -20,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -2,
-                    Quesiton = "DB Server Name",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 0
-                },
-                new SurveyQuestion
-                {
-                    Id = -21,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -2,
-                    Quesiton = "DB Engine Type &amp; Version",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 1
-                },
-                new SurveyQuestion
-                {
-                    Id = -22,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -2,
-                    Quesiton = "DB Name",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 2
-                },
-                new SurveyQuestion
-                {
-                    Id = -23,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -2,
-                    Quesiton = "DB Location",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 3
-                },
-                new SurveyQuestion
-                {
-                    Id = -24,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -2,
-                    Quesiton = "Total DB Size in (MB's GB'S TB'S)",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 4
-                },
-                new SurveyQuestion
-                {
-                    Id = -25,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -3,
-                    ReplyType = QuestionReplyTypes.Text,
-                    Quesiton = "SSL Name",
-                    Order = 0
-                },
-                new SurveyQuestion
-                {
-                    Id = -26,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -3,
-                    ReplyType = QuestionReplyTypes.Text,
-                    Quesiton = "SSL Type",
-                    Order = 1
-                },
-                new SurveyQuestion
-                {
-                    Id = -27,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -3,
-                    ReplyType = QuestionReplyTypes.Text,
-                    Quesiton = "SSL Location (Server Name/Location)",
-                    Order = 2
-                },
-                new SurveyQuestion
-                {
-                    Id = -28,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -4,
-                    Quesiton = "Website Name",
-                    Order = 0,
-                },
-                new SurveyQuestion
-                {
-                    Id = -29,
-                    SurveyStepId = -2,
-                    SurveyQuestionGroupID = -4,
-                    Quesiton = "Website Location (Server Name/Location)",
-                    Order = 1
-                },
-                new SurveyQuestion
-                {
-                    Id = -30,
-                    SurveyStepId = -3,
-                    SurveyQuestionGroupID = -5,
-                    Quesiton = "Name of Server",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 0
-                },
-                new SurveyQuestion
-                {
-                    Id = -31,
-                    SurveyStepId = -3,
-                    SurveyQuestionGroupID = -5,
-                    Quesiton = "Describe the Type of Server",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 1
-                },
-                new SurveyQuestion
-                {
-                    Id = -32,
-                    SurveyStepId = -3,
-                    SurveyQuestionGroupID = -5,
-                    Quesiton = "OS Type & Version",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 2
-                },
-                new SurveyQuestion
-                {
-                    Id = -33,
-                    SurveyStepId = -3,
-                    SurveyQuestionGroupID = -5,
-                    Quesiton = "Total Storage of Server in (GB'S TB'S) & amp; Partitions",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 3
-                },
-                new SurveyQuestion
-                {
-                    Id = -34,
-                    SurveyStepId = -3,
-                    SurveyQuestionGroupID = -5,
-                    Quesiton = "State of Server (Physical, Virtual, Hyper-Visor)",
-                    ReplyType = QuestionReplyTypes.Text,
-                    Order = 4
-                },
-                new SurveyQuestion
-                {
                     Id = -35,
                     SurveyStepId = -3,
                     Quesiton = "Moving to Hosting Service Provider?",
@@ -500,7 +283,223 @@ namespace Company.Survey.Core.Data
                     ReplyType = QuestionReplyTypes.TextArea,
                     Quesiton = "Please include any additional technical details that you may feel is important that was not covered above:",
                     Order = 4,
-                }
+                },
+
+                new SurveyQuestion
+                {
+                    Id = -39,
+                    SurveyStepId = -2,
+                    Quesiton = "Specify the number of Source Server(s) to be migrated, Type, OS, Storage, State?",
+                    Order = 1
+                },
+                new SurveyQuestion
+                {
+                    Id = -40,
+                    SurveyStepId = -2,
+                    Quesiton = "Specify the Database Engine Server(s) Type | Version | Name | Size | Quantity?",
+                    Order = 4,
+                    Note = "(e.g. Microsoft SQL 2014, MariaDB 5.6, MySQL 5.4, Name of DB, size of DB, MB’s, GB’s, TB’s)",
+                },
+                new SurveyQuestion
+                {
+                    Id = -41,
+                    SurveyStepId = -2,
+                    Quesiton = "Are there any SSL certificate(s) installed (Type &amp; Location If possible)?",
+                    Order = 10,
+                    Note = "(if Yes please List)"
+                },
+                new SurveyQuestion
+                {
+                    Id = -42,
+                    SurveyStepId = -2,
+                    Quesiton = "List the number of Website Names (&amp; Location on Servers if possible)?",
+                    Order = 13
+                },
+                new SurveyQuestion
+                {
+                    Id = -43,
+                    SurveyStepId = -3,
+                    Quesiton = "Specify the number of Source Server(s) to be migrated, Type, OS, Storage, State?",
+                    Order = 1
+                },
+ new SurveyQuestion
+                {
+                    Id = -15,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -39,
+                    Quesiton = "Name of Server",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 0
+                },
+                new SurveyQuestion
+                {
+                    Id = -16,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -39,
+                    Quesiton = "Describe the Type of Server",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 1,
+                },
+                new SurveyQuestion
+                {
+                    Id = -17,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -39,
+                    Quesiton = "OS Type & Version",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 2
+                },
+                new SurveyQuestion
+                {
+                    Id = -18,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -39,
+                    Quesiton = "Total Storage of Server in (GB'S TB'S) & amp; Partitions",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 3
+                },
+                new SurveyQuestion
+                {
+                    Id = -19,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -39,
+                    Quesiton = "State of Server (Physical, Virtual, Hyper-Visor)",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 4
+                },
+                new SurveyQuestion
+                {
+                    Id = -20,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -40,
+                    Quesiton = "DB Server Name",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 0
+                },
+                new SurveyQuestion
+                {
+                    Id = -21,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -40,
+                    Quesiton = "DB Engine Type &amp; Version",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 1
+                },
+                new SurveyQuestion
+                {
+                    Id = -22,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -40,
+                    Quesiton = "DB Name",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 2
+                },
+                new SurveyQuestion
+                {
+                    Id = -23,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -40,
+                    Quesiton = "DB Location",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 3
+                },
+                new SurveyQuestion
+                {
+                    Id = -24,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -40,
+                    Quesiton = "Total DB Size in (MB's GB'S TB'S)",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 4
+                },
+                new SurveyQuestion
+                {
+                    Id = -25,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -41,
+                    ReplyType = QuestionReplyTypes.Text,
+                    Quesiton = "SSL Name",
+                    Order = 0
+                },
+                new SurveyQuestion
+                {
+                    Id = -26,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -41,
+                    ReplyType = QuestionReplyTypes.Text,
+                    Quesiton = "SSL Type",
+                    Order = 1
+                },
+                new SurveyQuestion
+                {
+                    Id = -27,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -41,
+                    ReplyType = QuestionReplyTypes.Text,
+                    Quesiton = "SSL Location (Server Name/Location)",
+                    Order = 2
+                },
+                new SurveyQuestion
+                {
+                    Id = -28,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -42,
+                    Quesiton = "Website Name",
+                    Order = 0,
+                },
+                new SurveyQuestion
+                {
+                    Id = -29,
+                    SurveyStepId = -2,
+                    ParentSurveyQuestionId = -42,
+                    Quesiton = "Website Location (Server Name/Location)",
+                    Order = 1
+                },
+                new SurveyQuestion
+                {
+                    Id = -30,
+                    SurveyStepId = -3,
+                    ParentSurveyQuestionId = -43,
+                    Quesiton = "Name of Server",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 0
+                },
+                new SurveyQuestion
+                {
+                    Id = -31,
+                    SurveyStepId = -3,
+                    ParentSurveyQuestionId = -43,
+                    Quesiton = "Describe the Type of Server",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 1
+                },
+                new SurveyQuestion
+                {
+                    Id = -32,
+                    SurveyStepId = -3,
+                    ParentSurveyQuestionId = -43,
+                    Quesiton = "OS Type & Version",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 2
+                },
+                new SurveyQuestion
+                {
+                    Id = -33,
+                    SurveyStepId = -3,
+                    ParentSurveyQuestionId = -43,
+                    Quesiton = "Total Storage of Server in (GB'S TB'S) & amp; Partitions",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 3
+                },
+                new SurveyQuestion
+                {
+                    Id = -34,
+                    SurveyStepId = -3,
+                    ParentSurveyQuestionId = -43,
+                    Quesiton = "State of Server (Physical, Virtual, Hyper-Visor)",
+                    ReplyType = QuestionReplyTypes.Text,
+                    Order = 4
+                },
             });
             modelBuilder.Entity<ClientSurveys>().HasData(new ClientSurveys
             {

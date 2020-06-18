@@ -93,7 +93,7 @@
               </strong>
             </span>
             <!-- single question -->
-            <span *ngIf="!question.groupedQuestions" class="padLeft input-group-sm">
+            <span *ngIf="!question.groupedQuestions.length" class="padLeft input-group-sm">
               <input [attr.data-questionid]="question.id"
                      type="text"
                      class="form-control"
@@ -106,7 +106,7 @@
         <div class="row pb-2 pb-1" *ngIf="question.note">
           <div class="col"><em>{{question.note}}</em></div>
         </div>
-        <div *ngIf="question.groupedQuestions && question.groupedQuestions.length">
+        <div *ngIf="question.groupedQuestions.length">
           <!-- grouped questions -->
           <table class="table pt-1">
             <thead>
