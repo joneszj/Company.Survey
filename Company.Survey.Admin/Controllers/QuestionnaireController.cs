@@ -1,4 +1,5 @@
-﻿using Company.Survey.Core.Data;
+﻿using Company.Survey.Admin.Models;
+using Company.Survey.Core.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -45,7 +46,7 @@ namespace Company.Survey.Admin.Controllers
                         .ThenInclude(e => e.ContentBlocks)
                 .FirstOrDefaultAsync();
 
-            var latestVersionvalue = await _context.Surveys.AsNoTracking().Where(e => e.SurveyKey == key).OrderByDescending(e => e.Version).Select(e => e.Version).FirstOrDefaultAsync();
+            var latestVersionvalue = await _context.Surveys.IgnoreQueryFilters().AsNoTracking().Where(e => e.SurveyKey == key).OrderByDescending(e => e.Version).Select(e => e.Version).FirstOrDefaultAsync();
 
             questionnaire.Version = ++latestVersionvalue;
             questionnaire.Id = 0;
@@ -88,7 +89,16 @@ namespace Company.Survey.Admin.Controllers
             return RedirectToAction("Index", "Surveys");
         }
 
-        // edit step (title order)
+        [HttpPost]
+        public async Task<ActionResult> UpdateQuestionnaireStep([FromBody] PostSurveyStep surveyStep)
+        {
+            var step = await _context.SurveySteps.FindAsync(surveyStep.Id);
+            step.Title = surveyStep.Title;
+            if (surveyStep.Order.HasValue) step.Order = surveyStep.Order.Value;
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
         // add new step
         // add question to step
         // remove question from step

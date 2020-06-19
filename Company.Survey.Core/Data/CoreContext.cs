@@ -30,6 +30,7 @@ namespace Company.Survey.Core.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<Entities.Survey> Surveys { get; set; }
         public DbSet<ClientSurveys> ClientSurveys { get; set; }
+        public DbSet<SurveyStep> SurveySteps { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
