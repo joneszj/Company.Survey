@@ -1,14 +1,10 @@
 ﻿// step
-function updateStep() {
-    fetch(`${window.location.origin}/step/Update`, {
+function updateStep(body) {
+    return fetch(`${window.location.origin}/step/Update`, {
         method: 'put',
         headers: { 'Content-Type': 'application/json' },
         credentials: "same-origin",
-        body: JSON.stringify({
-            Id: Number(event.target.id),
-            Order: Number(event.target.dataset.order),
-            Title: event.target.value
-        })
+        body: JSON.stringify(body)
     }).then(e => assertStatus(e));
 }
 
@@ -21,43 +17,43 @@ function addStep(body) {
     }).then(e => assertStatus(e));
 }
 
-function removeStepConfirm(id, cb) {
+function removeStepConfirm(id) {
     if (confirm("Removing the step will remove all questions in the step. Continue?")) {
         return fetch(`${window.location.origin}/step/remove`, {
             method: 'delete',
             headers: { 'Content-Type': 'application/json' },
             credentials: "same-origin",
             body: JSON.stringify({ StepId: Number(id) })
-        }).then(e => assertStatus(e)).then(cb);
+        }).then(e => assertStatus(e));
     }
 }
 
 // step content
-function updateStepContent() {
-    fetch(`${window.location.origin}/stepcontent/Update`, {
+function updateStepContent(body) {
+    return fetch(`${window.location.origin}/stepcontent/Update`, {
         method: 'put',
         headers: { 'Content-Type': 'application/json' },
         credentials: "same-origin",
-        body: null
+        body: JSON.stringify(body)
     }).then(e => assertStatus(e));
 }
 
-function addStepContent() {
-    fetch(`${window.location.origin}/stepcontent/add`, {
+function addStepContent(body) {
+    return fetch(`${window.location.origin}/stepcontent/add`, {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         credentials: "same-origin",
-        body: null
+        body: JSON.stringify(body)
     }).then(e => assertStatus(e));
 }
 
-function removeStepContentConfirm() {
+function removeStepContentConfirm(id) {
     if (confirm("Removing the step content will remove all content blocks in the step. Continue?")) {
-        fetch(`${window.location.origin}/stepcontent/remove`, {
+        return fetch(`${window.location.origin}/stepcontent/remove`, {
             method: 'delete',
             headers: { 'Content-Type': 'application/json' },
             credentials: "same-origin",
-            body: null
+            body: JSON.stringify({ StepContentId: Number(id) })
         }).then(e => assertStatus(e));
     }
 }
@@ -122,6 +118,7 @@ function removeQuestion() {
     }
 }
 
+// notifications
 function assertStatus(response) {
     return new Promise(resolve => {
         if (response.ok) console.assert(response, "TODO: add success indication");

@@ -47,7 +47,7 @@
                            id="@step.Id"
                            value="@step.Title"
                            data-order="@(step.Order)"
-                           onblur="updateStep()" />
+                           onblur="() => updateStep({ StepContentId: event.target.id, Title: event.target.value })" />
                 </div>
             </div>
             <div class="row bg-secondary text-white pb-2">
@@ -57,11 +57,11 @@
                     </button>
                     @if (step.StepContent == null)
                     {
-                        <button class="btn btn-primary" onclick="addContentSection()">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#addStepContentModal" onclick="document.getElementById('stepContentStepId').value = @step.Id">
                             Add Content Section
                         </button>
                     }
-                    <button class="btn btn-warning" onclick="removeStepConfirm(@step.Id, () => window.location.reload())">
+                    <button class="btn btn-warning" onclick="removeStepConfirm(@step.Id).then(() => window.location.reload())">
                         Remove Step
                     </button>
                 </div>
@@ -69,26 +69,38 @@
             @if (step.StepContent != null)
             {
                 <div class="row p-2">
-                    <div class="p-2">
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#addContentBlockModal">
-                            Add Block
-                        </button>
-                    </div>
-                    <div class="p-2">
-                        <button class="btn btn-warning" onclick="removeStepContentConfirm()">
-                            Remove Content Section
-                        </button>
+                    <div class="col">
+                        <div class="row">
+                            <label>Content Section:</label>
+                            <input class="form-control pt-2"
+                                   id="@step.StepContent.Id"
+                                   value="@step.StepContent.Title"
+                                   onblur="updateStepContent({ StepContentId: Number(event.target.id), Title: event.target.value })" />
+                        </div>
+                        <div class="row">
+                            <div class="p-2">
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#addContentBlockModal">
+                                    Add Block
+                                </button>
+                            </div>
+                            <div class="p-2">
+                                <button class="btn btn-warning" onclick="removeStepContentConfirm(@step.StepContent.Id).then(() => window.location.reload())">
+                                    Remove Content Section
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 @foreach (var block in step.StepContent.ContentBlocks)
                 {
                     <div class="row bg-light" id="@block.Id">
                         <div class="col">
+                            <label>Content Block Position: </label>
                             <input class="form-control pt-2"
                                    id="@block.Id"
                                    value="@block.ContentData"
-                                   onblur="updateStepContent()" />
-                            <button class="btn btn-warning m-2" onclick="removeContentBlock()">
+                                   onblur="() => updateContentBlock()" />
+                            <button class="btn btn-warning m-2" onclick="removeContentBlock(@block.Id).then(() => window.location.reload())">
                                 Remove Block
                             </button>
                         </div>
@@ -113,7 +125,7 @@
                                     <button class="btn btn-primary m-2" data-toggle="modal" data-target="#addQuestionModal">
                                         Add Sub-Question
                                     </button>
-                                    <button class="btn btn-warning m-2" onclick="removeQuestion()">
+                                    <button class="btn btn-warning m-2" onclick="removeQuestion({ QuestionId: @question.Id }).then(() => window.location.reload())">
                                         Remove
                                     </button>
                                 </div>
@@ -129,7 +141,7 @@
                                        data-order="@question.Order"
                                        data-parent="@question.ParentSurveyQuestionId"
                                        onblur="updateQuestion()" />
-                                <button class="btn btn-warning m-2" onclick="removeQuestion()">
+                                <button class="btn btn-warning m-2" onclick="removeQuestion({ QuestionId: @question.Id }).then(() => window.location.reload())">
                                     Remove Sub-Question
                                 </button>
                             </div>
@@ -142,6 +154,7 @@
     </div>
 </div>
 
-@await Html.PartialAsync("_AddStep", new PostSurveyStep { SurveyId = Model.Id })
-@await Html.PartialAsync("_AddQuestion")
+@await Html.PartialAsync("_AddStep")
+@await Html.PartialAsync("_AddStepContent")
 @await Html.PartialAsync("_AddContentBlock")
+@await Html.PartialAsync("_AddQuestion")

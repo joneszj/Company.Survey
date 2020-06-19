@@ -19,6 +19,7 @@ namespace Company.Survey.Core.Data
             modelBuilder.Entity<Client>().HasQueryFilter(p => p.IsActive);
             modelBuilder.Entity<Entities.Survey>().HasQueryFilter(p => p.IsActive);
             modelBuilder.Entity<SurveyQuestion>().HasQueryFilter(p => p.IsActive);
+            modelBuilder.Entity<StepContent>().HasQueryFilter(p => p.IsActive);
             modelBuilder.Entity<SurveyStep>().HasQueryFilter(p => p.IsActive);
             modelBuilder.Entity<Content>().HasQueryFilter(p => p.IsActive);
 
@@ -31,6 +32,7 @@ namespace Company.Survey.Core.Data
         public DbSet<Entities.Survey> Surveys { get; set; }
         public DbSet<ClientSurveys> ClientSurveys { get; set; }
         public DbSet<SurveyStep> SurveySteps { get; set; }
+        public DbSet<StepContent> StepContents { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
@@ -42,8 +44,20 @@ namespace Company.Survey.Core.Data
             {
                 if (item.Entity is CoreBase entity)
                 {
-                    item.State = EntityState.Unchanged;
-                    entity.IsActive = false;
+                    if (item.Entity is StepContent)
+                    {
+                        // TODO: this entitiy should be many to many
+                        // because its 1-1 the soft delete fails on inserting new records if one already exists
+                        // (fails the fk constraint on stepId)
+                        // Instead of another db structure change, I am deleting the record to enable new sections
+                        // as the example doesn't indicate a many-many map of stepcontents
+                        item.State = EntityState.Deleted;
+                    }
+                    else
+                    {
+                        item.State = EntityState.Unchanged;
+                        entity.IsActive = false;
+                    }
                 }
             }
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);

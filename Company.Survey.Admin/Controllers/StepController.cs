@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Company.Survey.Admin.Models;
+using Company.Survey.Admin.Models.Step;
 using Company.Survey.Core.Data;
 using Company.Survey.Core.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -65,7 +65,8 @@ namespace Company.Survey.Admin.Controllers
                 .Include(e => e.SurveySteps.OrderBy(e=>e.Order))
                 .FirstOrDefaultAsync(e => e.Id == step.SurveyId);
             var order = 0;
-            // strangely, the .Include(e => e.SurveySteps.OrderBy(e=>e.Order)) seems to ignore query filters :/
+            // strangely, the .Include(e => e.SurveySteps.OrderBy(e=>e.Order)) seems to ignore query filters :/ 
+            // and has the removed recored in the dataset
             survey.SurveySteps.Where(e=>e.IsActive).ToList().ForEach((step) => { step.Order = order++; });
             await _context.SaveChangesAsync();
             return Ok();

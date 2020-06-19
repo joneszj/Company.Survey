@@ -1,4 +1,4 @@
-﻿namespace Company.Survey.Admin.Models
+﻿namespace Company.Survey.Admin.Models.Step
 {
     public class PostSurveyStep
     {

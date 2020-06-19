@@ -26,4 +26,9 @@
     <ProjectReference Include="..\Company.Survey.Core\Company.Survey.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\ContentBlock\" />
+    <Folder Include="Models\Question\" />
+  </ItemGroup>
+
 </Project>

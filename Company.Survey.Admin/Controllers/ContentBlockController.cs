@@ -27,5 +27,11 @@ namespace Company.Survey.Admin.Controllers
         {
             return Ok();
         }
+
+        [HttpDelete]
+        public async Task<ActionResult> Remove()
+        {
+            return Ok();
+        }
     }
 }
