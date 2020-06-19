@@ -1,18 +1,36 @@
 ﻿<div class="modal" id="addStepModal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Modal Heading</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                Modal body.. Step
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Step</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="position">Position</label>
+                        <input type="number" class="form-control" id="stepPosition" placeholder="Last if omitted...">
+                    </div>
+                    <div class="form-group">
+                        <label for="stepTitle">Title</label>
+                        <input type="text" class="form-control" id="stepTitle" placeholder="Enter title" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="addStepCall()">
+                        Add Step
+                    </button>
+                </div>
         </div>
     </div>
 </div>
 <script>
+    function addStepCall() {
+        addStep({
+            SurveyId: Number(document.getElementById('surveyId').value),
+            Order: Number(document.getElementById('stepPosition').value || -1),
+            Title: document.getElementById('stepTitle').value
+        }).then(e => {
+            window.location.reload();
+        });
+    }
 </script>

@@ -2,8 +2,8 @@
 {
     public class PostSurveyStep
     {
-        public int Id { get; set; }
-        public int? Order { get; set; }
+        public int SurveyId { get; set; }
+        public int Order { get; set; }
         public string Title { get; set; }
     }
 }
