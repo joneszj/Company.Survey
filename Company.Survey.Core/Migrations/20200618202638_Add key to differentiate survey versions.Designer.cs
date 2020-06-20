@@ -4,14 +4,16 @@ using Company.Survey.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Company.Survey.Core.Migrations
 {
     [DbContext(typeof(CoreContext))]
-    partial class CoreContextModelSnapshot : ModelSnapshot
+    [Migration("20200618202638_Add key to differentiate survey versions")]
+    partial class Addkeytodifferentiatesurveyversions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,13 +73,13 @@ namespace Company.Survey.Core.Migrations
                             Id = -1,
                             CompanyName = "Test Company",
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 429, DateTimeKind.Local).AddTicks(1712),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 731, DateTimeKind.Local).AddTicks(5529),
                             Email = "joneszj@gmail.com",
                             FirstName = "Zachary",
                             IsActive = true,
                             LastName = "Jones",
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 429, DateTimeKind.Local).AddTicks(1730),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 731, DateTimeKind.Local).AddTicks(5547),
                             Phone = "555-333-1111"
                         });
                 });
@@ -137,11 +139,11 @@ namespace Company.Survey.Core.Migrations
                             ClientId = -1,
                             ClientSurveyKey = new Guid("00000000-0000-0000-0000-000000000000"),
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(5734),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 733, DateTimeKind.Local).AddTicks(316),
                             IsActive = true,
                             IsComplete = false,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(5745),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 733, DateTimeKind.Local).AddTicks(328),
                             SurveyId = -1
                         });
                 });
@@ -178,7 +180,7 @@ namespace Company.Survey.Core.Migrations
 
                     b.HasIndex("StepContentId");
 
-                    b.ToTable("ConbentBlocks");
+                    b.ToTable("Content");
 
                     b.HasData(
                         new
@@ -186,10 +188,10 @@ namespace Company.Survey.Core.Migrations
                             Id = -1,
                             ContentData = "<img class=\"img-fluid\" src=\"/assets/images/databerrymigrationprocess.jpg\" alt=\"migration process\">",
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 429, DateTimeKind.Local).AddTicks(9646),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(4025),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 429, DateTimeKind.Local).AddTicks(9658),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(4037),
                             StepContentId = -1
                         });
                 });
@@ -242,10 +244,10 @@ namespace Company.Survey.Core.Migrations
                             Id = -1,
                             ClientSurveyId = -1,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(9765),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 733, DateTimeKind.Local).AddTicks(4345),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(9779),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 733, DateTimeKind.Local).AddTicks(4359),
                             ReplyData = "Azure",
                             SurveyQuestionId = -1
                         });
@@ -284,17 +286,17 @@ namespace Company.Survey.Core.Migrations
                     b.HasIndex("SurveyStepId")
                         .IsUnique();
 
-                    b.ToTable("StepContents");
+                    b.ToTable("StepContent");
 
                     b.HasData(
                         new
                         {
                             Id = -1,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 429, DateTimeKind.Local).AddTicks(7969),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(2136),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 429, DateTimeKind.Local).AddTicks(7981),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(2147),
                             SurveyStepId = -1,
                             Title = "Databerry Migration Process:"
                         });
@@ -343,7 +345,7 @@ namespace Company.Survey.Core.Migrations
 
                     b.Property<string>("SurveyKey")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -354,9 +356,6 @@ namespace Company.Survey.Core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Id", "Version")
-                        .IsUnique();
-
-                    b.HasIndex("SurveyKey", "Version")
                         .IsUnique();
 
                     b.ToTable("Surveys");
@@ -370,11 +369,11 @@ namespace Company.Survey.Core.Migrations
                             ContactPhone = "855-350-0707",
                             ContactTitle = "Phone",
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 423, DateTimeKind.Local).AddTicks(8063),
-                            DateOfQuestionnaire = new DateTime(2020, 6, 19, 0, 0, 0, 0, DateTimeKind.Local),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 725, DateTimeKind.Local).AddTicks(4950),
+                            DateOfQuestionnaire = new DateTime(2020, 6, 18, 0, 0, 0, 0, DateTimeKind.Local),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 427, DateTimeKind.Local).AddTicks(2373),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 729, DateTimeKind.Local).AddTicks(5139),
                             SurveyKey = "Infrastructure Migration",
                             Title = "Infrastructure Migration Survey Form",
                             Version = 8
@@ -429,17 +428,17 @@ namespace Company.Survey.Core.Migrations
 
                     b.HasIndex("SurveyStepId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("SurveyQuestion");
 
                     b.HasData(
                         new
                         {
                             Id = -1,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(1390),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(5783),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(1402),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(5794),
                             Note = "(e.g. Amazon AWS, Azure, On-Premise)",
                             Order = 0,
                             Quesiton = "Current Hosting Service Provider?",
@@ -450,10 +449,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -2,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3817),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8385),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3828),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8396),
                             Note = "",
                             Order = 2,
                             Quesiton = "Total count of Server(s)?",
@@ -464,10 +463,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -3,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3833),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8401),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3836),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8404),
                             Note = "",
                             Order = 3,
                             Quesiton = "Is there a SAN? (Yes or No)",
@@ -478,10 +477,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -4,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3840),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8409),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3843),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8411),
                             Note = "",
                             Order = 5,
                             Quesiton = "Total Count of Database(s)?",
@@ -492,10 +491,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -5,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3846),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8415),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3848),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8417),
                             Note = "(e.g. .NET 4.5 | PHP 5.4 | Java 1.5)",
                             Order = 6,
                             Quesiton = "Custom Applications, Applications, Frameworks, | Versions? Please list all Applications types/versions & Names ?",
@@ -506,10 +505,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -6,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3851),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8420),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3853),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8423),
                             Note = "(e.g. Joomla 2.x, Drupal 7.2, WordPress 4.1, QuickBooks v18.0 etc.)",
                             Order = 6,
                             Quesiton = "Are there any Third-party commercial applications or platforms | API’s | Plug-ins?",
@@ -520,10 +519,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -7,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3856),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8426),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3859),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8429),
                             Note = "(Note: VPN will be required if migrating over WAN)",
                             Order = 7,
                             Quesiton = "Active Directory Migration (Yes or No)?",
@@ -534,10 +533,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -8,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3862),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8432),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3865),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8435),
                             Note = "(e.g. iOS Apple swift, Android java, Windows Mobile)",
                             Order = 8,
                             Quesiton = "Are there any Mobile Apps?",
@@ -548,10 +547,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -9,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3868),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8438),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3871),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8440),
                             Note = "(e.g. Authorize.net, PayPal, Stripe, Magento etc.)",
                             Order = 9,
                             Quesiton = "Are there any E-commerce or Payment Gateways Service/platforms involved?",
@@ -562,10 +561,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -10,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3874),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8444),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3877),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8447),
                             Order = 11,
                             Quesiton = "Total SSL Certificate(s)?",
                             ReplyType = "Text",
@@ -575,10 +574,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -11,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3879),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8450),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3882),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8452),
                             Note = "(e.g. Webmin v1.89, Plesk v12.5, CPanel v58, Docker v17.x)",
                             Order = 12,
                             Quesiton = "Is there any Server Control Panels installed?",
@@ -589,10 +588,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -12,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3885),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8457),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3888),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8459),
                             Note = "(e.g. IIS 7.0, Apache 2.2, Nginx 1.1)",
                             Order = 14,
                             Quesiton = "List existing Web Server platform & Versions?",
@@ -603,10 +602,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -13,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3891),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8462),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3893),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8465),
                             Note = "(e.g. Sendmail v8.7, PHPmailer, Postfix, MS Exchange v2013, Exim)",
                             Order = 14,
                             Quesiton = "Are there any E-mail platforms or services installed on the Server(s) Type | Version?",
@@ -617,10 +616,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -14,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3896),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8468),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3899),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8471),
                             Note = "(e.g. Google analytics data and/or Environment estimated usage of High, Medium, Low)",
                             Order = 15,
                             Quesiton = "Total Monthly estimated average of Usage Traffic and/or Transactions volume?",
@@ -631,10 +630,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -35,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3902),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8475),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3907),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8477),
                             Note = "(e.g. Amazon AWS, Azure, On-Premise)",
                             Order = 0,
                             Quesiton = "Moving to Hosting Service Provider?",
@@ -645,10 +644,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -36,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3910),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8480),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3913),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8483),
                             Order = 2,
                             Quesiton = "Is there a SAN? (Yes or No)",
                             ReplyType = "Text",
@@ -658,10 +657,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -37,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3917),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8486),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3920),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8488),
                             Note = "(e.g. P= Physical V=Virtual P-P, P-V, V-V, V-P)",
                             Order = 3,
                             Quesiton = "Specify the Type of Migration?",
@@ -672,10 +671,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -38,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3924),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8491),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3926),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8494),
                             Order = 4,
                             Quesiton = "Please include any additional technical details that you may feel is important that was not covered above:",
                             ReplyType = "TextArea",
@@ -685,10 +684,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -39,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3929),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8497),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3931),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8499),
                             Order = 1,
                             Quesiton = "Specify the number of Source Server(s) to be migrated, Type, OS, Storage, State?",
                             ReplyType = "Text",
@@ -698,10 +697,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -40,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3934),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8502),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3936),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8505),
                             Note = "(e.g. Microsoft SQL 2014, MariaDB 5.6, MySQL 5.4, Name of DB, size of DB, MB’s, GB’s, TB’s)",
                             Order = 4,
                             Quesiton = "Specify the Database Engine Server(s) Type | Version | Name | Size | Quantity?",
@@ -712,10 +711,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -41,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3939),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8508),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3942),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8510),
                             Note = "(if Yes please List)",
                             Order = 10,
                             Quesiton = "Are there any SSL certificate(s) installed (Type & Location If possible)?",
@@ -726,10 +725,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -42,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3945),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8513),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(3947),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8516),
                             Order = 13,
                             Quesiton = "List the number of Website Names (& Location on Servers if possible)?",
                             ReplyType = "Text",
@@ -739,10 +738,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -43,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4002),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8519),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4005),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8521),
                             Order = 1,
                             Quesiton = "Specify the number of Source Server(s) to be migrated, Type, OS, Storage, State?",
                             ReplyType = "Text",
@@ -752,10 +751,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -15,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4009),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8524),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4011),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(8527),
                             Order = 0,
                             ParentSurveyQuestionId = -39,
                             Quesiton = "Name of Server",
@@ -766,10 +765,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -16,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4592),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9104),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4602),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9114),
                             Order = 1,
                             ParentSurveyQuestionId = -39,
                             Quesiton = "Describe the Type of Server",
@@ -780,10 +779,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -17,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4607),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9173),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4610),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9176),
                             Order = 2,
                             ParentSurveyQuestionId = -39,
                             Quesiton = "OS Type & Version",
@@ -794,10 +793,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -18,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4613),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9180),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4616),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9182),
                             Order = 3,
                             ParentSurveyQuestionId = -39,
                             Quesiton = "Total Storage of Server in (GB'S TB'S) & amp; Partitions",
@@ -808,10 +807,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -19,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4619),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9186),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4621),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9188),
                             Order = 4,
                             ParentSurveyQuestionId = -39,
                             Quesiton = "State of Server (Physical, Virtual, Hyper-Visor)",
@@ -822,10 +821,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -20,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4624),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9192),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4627),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9195),
                             Order = 0,
                             ParentSurveyQuestionId = -40,
                             Quesiton = "DB Server Name",
@@ -836,10 +835,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -21,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4630),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9198),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4632),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9200),
                             Order = 1,
                             ParentSurveyQuestionId = -40,
                             Quesiton = "DB Engine Type & Version",
@@ -850,10 +849,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -22,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4635),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9204),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4637),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9206),
                             Order = 2,
                             ParentSurveyQuestionId = -40,
                             Quesiton = "DB Name",
@@ -864,10 +863,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -23,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4640),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9209),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4643),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9212),
                             Order = 3,
                             ParentSurveyQuestionId = -40,
                             Quesiton = "DB Location",
@@ -878,10 +877,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -24,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4646),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9215),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4648),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9217),
                             Order = 4,
                             ParentSurveyQuestionId = -40,
                             Quesiton = "Total DB Size in (MB's GB'S TB'S)",
@@ -892,10 +891,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -25,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4651),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9220),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4653),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9223),
                             Order = 0,
                             ParentSurveyQuestionId = -41,
                             Quesiton = "SSL Name",
@@ -906,10 +905,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -26,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4656),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9226),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4659),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9229),
                             Order = 1,
                             ParentSurveyQuestionId = -41,
                             Quesiton = "SSL Type",
@@ -920,10 +919,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -27,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4662),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9232),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4664),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9234),
                             Order = 2,
                             ParentSurveyQuestionId = -41,
                             Quesiton = "SSL Location (Server Name/Location)",
@@ -934,10 +933,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -28,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4667),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9238),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4669),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9240),
                             Order = 0,
                             ParentSurveyQuestionId = -42,
                             Quesiton = "Website Name",
@@ -948,10 +947,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -29,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4672),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9243),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4675),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9246),
                             Order = 1,
                             ParentSurveyQuestionId = -42,
                             Quesiton = "Website Location (Server Name/Location)",
@@ -962,10 +961,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -30,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4678),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9249),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4680),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9251),
                             Order = 0,
                             ParentSurveyQuestionId = -43,
                             Quesiton = "Name of Server",
@@ -976,10 +975,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -31,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4683),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9254),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4685),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9257),
                             Order = 1,
                             ParentSurveyQuestionId = -43,
                             Quesiton = "Describe the Type of Server",
@@ -990,10 +989,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -32,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4688),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9260),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4691),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9263),
                             Order = 2,
                             ParentSurveyQuestionId = -43,
                             Quesiton = "OS Type & Version",
@@ -1004,10 +1003,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -33,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4694),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9266),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4696),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9268),
                             Order = 3,
                             ParentSurveyQuestionId = -43,
                             Quesiton = "Total Storage of Server in (GB'S TB'S) & amp; Partitions",
@@ -1018,10 +1017,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -34,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4699),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9272),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 430, DateTimeKind.Local).AddTicks(4701),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(9274),
                             Order = 4,
                             ParentSurveyQuestionId = -43,
                             Quesiton = "State of Server (Physical, Virtual, Hyper-Visor)",
@@ -1068,17 +1067,17 @@ namespace Company.Survey.Core.Migrations
 
                     b.HasIndex("SurveyId", "SurveyVersion");
 
-                    b.ToTable("SurveySteps");
+                    b.ToTable("SurveyStep");
 
                     b.HasData(
                         new
                         {
                             Id = -1,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 429, DateTimeKind.Local).AddTicks(5250),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 731, DateTimeKind.Local).AddTicks(9221),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 429, DateTimeKind.Local).AddTicks(5265),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 731, DateTimeKind.Local).AddTicks(9235),
                             Order = 0,
                             SurveyId = -1,
                             SurveyVersion = 8,
@@ -1088,10 +1087,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -2,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 429, DateTimeKind.Local).AddTicks(7233),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(1268),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 429, DateTimeKind.Local).AddTicks(7245),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(1281),
                             Order = 1,
                             SurveyId = -1,
                             SurveyVersion = 8,
@@ -1101,10 +1100,10 @@ namespace Company.Survey.Core.Migrations
                         {
                             Id = -3,
                             CreatedBy = "Anonymous",
-                            CreatedDate = new DateTime(2020, 6, 19, 15, 57, 26, 429, DateTimeKind.Local).AddTicks(7251),
+                            CreatedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(1286),
                             IsActive = true,
                             ModifiedBy = "Anonymous",
-                            ModifiedDate = new DateTime(2020, 6, 19, 15, 57, 26, 429, DateTimeKind.Local).AddTicks(7253),
+                            ModifiedDate = new DateTime(2020, 6, 18, 16, 26, 37, 732, DateTimeKind.Local).AddTicks(1288),
                             Order = 2,
                             SurveyId = -1,
                             SurveyVersion = 8,

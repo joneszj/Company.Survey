@@ -23,16 +23,24 @@ export class HomeComponent {
   ) { }
 
   ngOnInit() {
-    const email = this._route.snapshot.paramMap.get("email");
-    const key = this._route.snapshot.paramMap.get("key");
-    if (!email || !key) {
-      this.hasLoaded = true;
-      this.notFound = true;
+    if (this._route.snapshot.paramMap.get("previewid")) {
+      console.log(this._route.snapshot.paramMap.get("previewid"));
+      this._http.get<SurveyViewModel>(`${environment.ApiBaseUrl}/surveys/preview/${Number(this._route.snapshot.paramMap.get("previewid"))}`).subscribe(survey => {
+        this.survey = survey;
+        this.hasLoaded = true;
+      });
+    } else {
+      const email = this._route.snapshot.paramMap.get("email");
+      const key = this._route.snapshot.paramMap.get("key");
+      if (!email || !key) {
+        this.hasLoaded = true;
+        this.notFound = true;
+      }
+      this._http.get<SurveyViewModel>(`${environment.ApiBaseUrl}/surveys/${email}/?key=${key}`).subscribe(survey => {
+        this.survey = survey;
+        this.hasLoaded = true;
+      });
     }
-    this._http.get<SurveyViewModel>(`${environment.ApiBaseUrl}/surveys/${email}/?key=${key}`).subscribe(survey => {
-      this.survey = survey;
-      this.hasLoaded = true;
-    });
   }
 
   updateClient = () => {

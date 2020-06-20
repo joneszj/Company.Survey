@@ -7,6 +7,12 @@ namespace Company.Survey.Core.Data.Entities
 {
     public class Survey : CoreBase
     {
+        /// <summary>
+        /// Used to differentiate surveys of same key but different version
+        /// </summary>
+        [Required]
+        public string SurveyKey { get; set; }
+        [Required]
         public int Version { get; set; }
         [Required]
         public string CompanyName { get; set; }

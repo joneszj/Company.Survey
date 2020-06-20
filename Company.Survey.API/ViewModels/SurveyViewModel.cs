@@ -1,4 +1,5 @@
 ﻿using Company.Survey.Core.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -19,6 +20,20 @@ namespace Company.Survey.API.ViewModels
             RequestedStartDate = clientSurvey.RequestedStartDate?.ToString("yyyy-MM-dd");
             RequestedEndDate = clientSurvey.RequestedEndDate?.ToString("yyyy-MM-dd");
             Steps = clientSurvey.Survey.SurveySteps.Select(surveyStep => new Step(surveyStep, clientSurvey.ClientQuestionReplies)).OrderBy(e=>e.Order);
+        }
+
+        public SurveyViewModel(Core.Data.Entities.Survey survey)
+        {
+            IsComplete = false;
+            Title = survey.Title;
+            Client = new ClientViewModel();
+            CompanyName = survey.CompanyName;
+            CompanySite = survey.CompanySite;
+            Contact = $"{survey.ContactTitle} {survey.ContactPhone}";
+            DateOfQuestionnaire = survey.DateOfQuestionnaire.ToString("yyyy-MM-dd");
+            RequestedStartDate = DateTime.Now.ToString("yyyy-MM-dd");
+            RequestedEndDate = DateTime.Now.ToString("yyyy-MM-dd");
+            Steps = survey.SurveySteps.Select(surveyStep => new Step(surveyStep, new List<Reply>())).OrderBy(e => e.Order);
         }
 
         public bool IsComplete { get; set; }

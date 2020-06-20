@@ -17,6 +17,7 @@ import { HomeComponent } from './home/home.component';
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
+      { path: 'preview/:previewid', component: HomeComponent, pathMatch: 'full' },
       { path: ':email/:key', component: HomeComponent, pathMatch: 'full' }
     ])
   ],

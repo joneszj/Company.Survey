@@ -19,6 +19,7 @@ namespace Company.Survey.Core.Data
             modelBuilder.Entity<Client>().HasQueryFilter(p => p.IsActive);
             modelBuilder.Entity<Entities.Survey>().HasQueryFilter(p => p.IsActive);
             modelBuilder.Entity<SurveyQuestion>().HasQueryFilter(p => p.IsActive);
+            modelBuilder.Entity<StepContent>().HasQueryFilter(p => p.IsActive);
             modelBuilder.Entity<SurveyStep>().HasQueryFilter(p => p.IsActive);
             modelBuilder.Entity<Content>().HasQueryFilter(p => p.IsActive);
 
@@ -30,6 +31,10 @@ namespace Company.Survey.Core.Data
         public DbSet<Client> Clients { get; set; }
         public DbSet<Entities.Survey> Surveys { get; set; }
         public DbSet<ClientSurveys> ClientSurveys { get; set; }
+        public DbSet<SurveyStep> SurveySteps { get; set; }
+        public DbSet<StepContent> StepContents { get; set; }
+        public DbSet<Content> ConbentBlocks { get; set; }
+        public DbSet<SurveyQuestion> Questions { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
@@ -41,8 +46,20 @@ namespace Company.Survey.Core.Data
             {
                 if (item.Entity is CoreBase entity)
                 {
-                    item.State = EntityState.Unchanged;
-                    entity.IsActive = false;
+                    if (item.Entity is StepContent)
+                    {
+                        // TODO: this entitiy should be many to many
+                        // because its 1-1 the soft delete fails on inserting new records if one already exists
+                        // (fails the fk constraint on stepId)
+                        // Instead of another db structure change, I am deleting the record to enable new sections
+                        // as the example doesn't indicate a many-many map of stepcontents
+                        item.State = EntityState.Deleted;
+                    }
+                    else
+                    {
+                        item.State = EntityState.Unchanged;
+                        entity.IsActive = false;
+                    }
                 }
             }
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
@@ -67,6 +84,7 @@ namespace Company.Survey.Core.Data
                 .HasPrincipalKey(e => new { e.Id, e.Version })
                 .HasForeignKey(e => new { e.SurveyId, e.SurveyVersion });
             modelBuilder.Entity<SurveyQuestion>().HasOne(e=>e.ParentSurveyQuestion).WithMany(e=>e.SurveyQuestions);
+            modelBuilder.Entity<Entities.Survey>().HasIndex("SurveyKey", "Version").IsUnique();
         }
         private static void SeedDatabase(ModelBuilder modelBuilder)
         {
@@ -82,8 +100,9 @@ namespace Company.Survey.Core.Data
                 CompanySite = "www.databerry.com",
                 ContactTitle = "Phone",
                 ContactPhone = "855-350-0707",
-                Title = $"Infrastructure Migration Survey Form V{Version}",
+                Title = $"Infrastructure Migration Survey Form",
                 DateOfQuestionnaire = DateTime.Today,
+                SurveyKey = "Infrastructure Migration"
             });
             modelBuilder.Entity<Client>().HasData(new Client
             {
@@ -358,7 +377,7 @@ namespace Company.Survey.Core.Data
                     Id = -18,
                     SurveyStepId = -2,
                     ParentSurveyQuestionId = -39,
-                    Quesiton = "Total Storage of Server in (GB'S TB'S) & amp; Partitions",
+                    Quesiton = "Total Storage of Server in (GB'S TB'S) & Partitions",
                     ReplyType = QuestionReplyTypes.Text,
                     Order = 3
                 },
@@ -491,7 +510,7 @@ namespace Company.Survey.Core.Data
                     Id = -33,
                     SurveyStepId = -3,
                     ParentSurveyQuestionId = -43,
-                    Quesiton = "Total Storage of Server in (GB'S TB'S) & amp; Partitions",
+                    Quesiton = "Total Storage of Server in (GB'S TB'S) & Partitions",
                     ReplyType = QuestionReplyTypes.Text,
                     Order = 3
                 },

@@ -25,19 +25,36 @@ namespace Company.Survey.API.Controllers
                     .ThenInclude(e => e.Survey)
                         .ThenInclude(e => e.SurveySteps)
                             .ThenInclude(e => e.Questions)
-                                .ThenInclude(e=>e.SurveyQuestions)
+                                .ThenInclude(e => e.SurveyQuestions)
                 // EF 5 preview feature https://docs.microsoft.com/en-us/ef/core/querying/related-data#filtered-include
                 .Include(e => e.ClientSurveys.Where(e => e.ClientSurveyKey == Key))
                         .ThenInclude(e => e.ClientQuestionReplies)
                 .Include(e => e.ClientSurveys.Where(e => e.ClientSurveyKey == Key))
-                    .ThenInclude(e=>e.Survey)
-                        .ThenInclude(e=>e.SurveySteps)
-                            .ThenInclude(e=>e.StepContent)
-                                .ThenInclude(e=>e.ContentBlocks)
+                    .ThenInclude(e => e.Survey)
+                        .ThenInclude(e => e.SurveySteps)
+                            .ThenInclude(e => e.StepContent)
+                                .ThenInclude(e => e.ContentBlocks)
                 .FirstOrDefaultAsync();
 
             if (survey == null) return NotFound();
             return Ok(new SurveyViewModel(survey.ClientSurveys.Single()));
+        }
+
+        [HttpGet("preview/{Id}")]
+        public async Task<ActionResult<SurveyViewModel>> GetSurveyByClientSurveyKey(int Id)
+        {
+            if (!ModelState.IsValid) return NotFound();
+            var survey = await _context.Surveys.Where(e => e.Id == Id)
+                        .Include(e => e.SurveySteps)
+                            .ThenInclude(e => e.Questions)
+                                .ThenInclude(e => e.SurveyQuestions)
+                        .Include(e => e.SurveySteps)
+                            .ThenInclude(e => e.StepContent)
+                                .ThenInclude(e => e.ContentBlocks)
+                .FirstOrDefaultAsync();
+
+            if (survey == null) return NotFound();
+            return Ok(new SurveyViewModel(survey));
         }
 
         [HttpPut]
