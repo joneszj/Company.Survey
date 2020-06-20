@@ -13,10 +13,7 @@ namespace Company.Survey.Admin.Controllers
     {
         private readonly CoreContext _context;
 
-        public ClientsController(CoreContext context)
-        {
-            _context = context;
-        }
+        public ClientsController(CoreContext context) => _context = context;
 
         // GET: Clients
         public async Task<IActionResult> Index()

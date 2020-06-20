@@ -1,4 +1,5 @@
-﻿<div class="modal" id="addQuestionModal">
+﻿<div class="modal" id="addContentBlockModal">
+    <input type="hidden" id="stepContentStepId" />
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,15 +8,24 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="stepTitle">Title</label>
-                    <input type="text" class="form-control" id="contentBlockTitle" placeholder="Enter title" required>
+                    <label for="stepTitle">Content</label>
+                    <input type="text" class="form-control" id="contentBlockContent" placeholder="Enter content" required>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal" onclick="addContentBlockCall()">
-                    Add Step
+                    Add Content
                 </button>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function addContentBlockCall() {
+        addContentBlock({
+            SurveyId: Number(document.getElementById('surveyId').value),
+            StepContentId: Number(document.getElementById('stepContentStepId').value),
+            Content: document.getElementById('contentBlockContent').value
+        }).then(() => window.location.reload());
+    }
+</script>

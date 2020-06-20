@@ -12,10 +12,7 @@ namespace Company.Survey.Admin.Controllers
     {
         private readonly CoreContext _context;
 
-        public StepContentController(CoreContext context)
-        {
-            _context = context;
-        }
+        public StepContentController(CoreContext context) => _context = context;
 
         [HttpPost]
         public async Task<ActionResult> Add([FromBody] PostStepContent postStepContent)

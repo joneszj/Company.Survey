@@ -14,10 +14,7 @@ namespace Company.Survey.Admin.Controllers
     {
         private readonly CoreContext _context;
 
-        public StepController(CoreContext context)
-        {
-            _context = context;
-        }
+        public StepController(CoreContext context) => _context = context;
 
         [HttpPost]
         public async Task<ActionResult> Add([FromBody] PostSurveyStep postStepViewModel)
@@ -34,9 +31,14 @@ namespace Company.Survey.Admin.Controllers
                     if (i == postStepViewModel.Order) steps[i].Order = i + 1;
                 }
             }
+            else
+            {
+                if (steps.Length == 0) postStepViewModel.Order = 0;
+                else postStepViewModel.Order = steps.Length + 1;
+            }
             var newSurvey = new SurveyStep
             {
-                Order = postStepViewModel.Order == -1 ? survey.SurveySteps.Count + 1 : postStepViewModel.Order,
+                Order = postStepViewModel.Order,
                 Title = postStepViewModel.Title
             };
             survey.SurveySteps.Add(newSurvey);

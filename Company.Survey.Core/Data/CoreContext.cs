@@ -33,6 +33,8 @@ namespace Company.Survey.Core.Data
         public DbSet<ClientSurveys> ClientSurveys { get; set; }
         public DbSet<SurveyStep> SurveySteps { get; set; }
         public DbSet<StepContent> StepContents { get; set; }
+        public DbSet<Content> ConbentBlocks { get; set; }
+        public DbSet<SurveyQuestion> Questions { get; set; }
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
@@ -375,7 +377,7 @@ namespace Company.Survey.Core.Data
                     Id = -18,
                     SurveyStepId = -2,
                     ParentSurveyQuestionId = -39,
-                    Quesiton = "Total Storage of Server in (GB'S TB'S) & amp; Partitions",
+                    Quesiton = "Total Storage of Server in (GB'S TB'S) & Partitions",
                     ReplyType = QuestionReplyTypes.Text,
                     Order = 3
                 },
@@ -508,7 +510,7 @@ namespace Company.Survey.Core.Data
                     Id = -33,
                     SurveyStepId = -3,
                     ParentSurveyQuestionId = -43,
-                    Quesiton = "Total Storage of Server in (GB'S TB'S) & amp; Partitions",
+                    Quesiton = "Total Storage of Server in (GB'S TB'S) & Partitions",
                     ReplyType = QuestionReplyTypes.Text,
                     Order = 3
                 },

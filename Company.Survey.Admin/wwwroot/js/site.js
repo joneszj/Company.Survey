@@ -59,61 +59,88 @@ function removeStepContentConfirm(id) {
 }
 
 // content block
-function updateContentBlock() {
-    fetch(`${window.location.origin}/stepblock/update`, {
+function updateContentBlock(body) {
+    return fetch(`${window.location.origin}/contentblock/update`, {
         method: 'put',
         headers: { 'Content-Type': 'application/json' },
         credentials: "same-origin",
-        body: null
+        body: JSON.stringify(body)
     }).then(e => assertStatus(e));
 }
 
-function addContentBlock() {
-    fetch(`${window.location.origin}/stepblock/add`, {
+function addContentBlock(body) {
+    return fetch(`${window.location.origin}/contentblock/add`, {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         credentials: "same-origin",
-        body: null
+        body: JSON.stringify(body)
     }).then(e => assertStatus(e));
 }
 
-function removeContentBlock() {
+function removeContentBlock(id) {
     if (confirm("Are you sure?")) {
-        fetch(`${window.location.origin}/contentblock/remove`, {
+        return fetch(`${window.location.origin}/contentblock/remove`, {
             method: 'delete',
             headers: { 'Content-Type': 'application/json' },
             credentials: "same-origin",
-            body: null
+            body: JSON.stringify({ ContentBlockId: Number(id) })
         }).then(e => assertStatus(e));
     }
 }
 
 // question
-function updateQuestion() {
-    fetch(`${window.location.origin}/question/update`, {
+function updateQuestion(body) {
+    return fetch(`${window.location.origin}/question/update`, {
         method: 'put',
         headers: { 'Content-Type': 'application/json' },
         credentials: "same-origin",
-        body: null
+        body: JSON.stringify(body)
     }).then(e => assertStatus(e));
 }
 
-function addQuestion() {
-    fetch(`${window.location.origin}/question/add`, {
+function updateQuestionText(body) {
+    return fetch(`${window.location.origin}/question/updatetext`, {
+        method: 'put',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: "same-origin",
+        body: JSON.stringify(body)
+    }).then(e => assertStatus(e));
+}
+
+function updateQuestionNote(body) {
+    return fetch(`${window.location.origin}/question/updatenote`, {
+        method: 'put',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: "same-origin",
+        body: JSON.stringify(body)
+    }).then(e => assertStatus(e));
+}
+
+function updateQuestionNote(body) {
+    return fetch(`${window.location.origin}/question/updateorder`, {
+        method: 'put',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: "same-origin",
+        body: JSON.stringify(body)
+    }).then(e => assertStatus(e));
+}
+
+function addQuestion(body) {
+    return fetch(`${window.location.origin}/question/add`, {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         credentials: "same-origin",
-        body: null
+        body: JSON.stringify(body)
     }).then(e => assertStatus(e));
 }
 
-function removeQuestion() {
+function removeQuestion(id) {
     if (confirm("Are you sure?")) {
-        fetch(`${window.location.origin}/question/remove`, {
+        return fetch(`${window.location.origin}/question/remove`, {
             method: 'delete',
             headers: { 'Content-Type': 'application/json' },
             credentials: "same-origin",
-            body: null
+            body: JSON.stringify({ QuestionId: Number(id) })
         }).then(e => assertStatus(e));
     }
 }
@@ -121,8 +148,8 @@ function removeQuestion() {
 // notifications
 function assertStatus(response) {
     return new Promise(resolve => {
-        if (response.ok) console.assert(response, "TODO: add success indication");
-        else console.assert(response, "TODO: add failure indication")
+        if (response.ok) $.notify('Success!', "success");
+        else $.notify('Something when wrong :(', "error");
         resolve(response);
     })
 }
