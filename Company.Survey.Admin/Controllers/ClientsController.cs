@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Company.Survey.Core.Data;
 using Company.Survey.Core.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Company.Survey.Admin.Controllers
 {
@@ -35,6 +36,17 @@ namespace Company.Survey.Admin.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.ClientSurveys = await _context.ClientSurveys
+                .Include(e => e.Client)
+                .Include(e => e.Survey)
+                .Where(e => e.Client.Id == id.Value)
+                .Select(e=> new SelectListItem { Text = $"{e.Survey.Title} ({e.Survey.Version})", Value = e.Survey.Id.ToString() })
+                .ToListAsync();
+
+            ViewBag.Surveys = await _context.Surveys
+                .Select(e => new SelectListItem { Text = $"{e.Title} ({e.Version})", Value = e.Id.ToString() })
+                .ToListAsync();
 
             return View(client);
         }

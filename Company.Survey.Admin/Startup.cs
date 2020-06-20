@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Company.Survey.Core.Data;
+using System.Net.Mail;
+using System.Net;
 
 namespace Company.Survey.Admin
 {
@@ -22,6 +24,19 @@ namespace Company.Survey.Admin
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient((serviceProvider) =>
+            {
+                return new SmtpClient()
+                {
+                    Host = Configuration.GetValue<string>("Email:Smtp:Host"),
+                    Port = Configuration.GetValue<int>("Email:Smtp:Port"),
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(
+                            Configuration.GetValue<string>("Email:Smtp:Username"),
+                            Configuration.GetValue<string>("Email:Smtp:Password")
+                        )
+                };
+            });
             services.AddDbContext<CoreContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CoreConnectionString")));
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

@@ -116,7 +116,8 @@ function updateQuestionNote(body) {
     }).then(e => assertStatus(e));
 }
 
-function updateQuestionNote(body) {
+function updateQuestionOrder(body) {
+    // TODO: test/complete
     return fetch(`${window.location.origin}/question/updateorder`, {
         method: 'put',
         headers: { 'Content-Type': 'application/json' },
