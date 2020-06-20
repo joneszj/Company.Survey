@@ -17,3 +17,6 @@ init
 						Note: the requitements do not indicate that questions need to be reused, so to keep things simple each question is tied to a survey and can't be reused without duplicating or reassigning the question
 	add .api
 		simple api that interacts with .core to retrieve and commit surveys
+
+	add .admin
+		Add User audit data

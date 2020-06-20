@@ -6,19 +6,18 @@ import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { TableComponent } from './home/table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    TableComponent
+    HomeComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
+      { path: 'preview/:previewid', component: HomeComponent, pathMatch: 'full' },
       { path: ':email/:key', component: HomeComponent, pathMatch: 'full' }
     ])
   ],

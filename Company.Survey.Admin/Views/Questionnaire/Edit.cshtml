@@ -1,0 +1,236 @@
+﻿@model Company.Survey.Core.Data.Entities.Survey
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Edit Questionnaire";
+}
+
+<h1>Edit Questionnaire</h1>
+<h2>Title: <span id="@Model.Id">@Model.Title</span> (@Model.Version)</h2>
+<div class="row">
+    Updates are made in real time and applied to all matching client distributed surveys of this version (Clients with this version: @ViewBag.ClientSurveyCount). To create an identical survey that will update separate from currently distributed client surveys, create a new verion.
+</div>
+<input type="hidden" id="surveyId" value="@Model.Id" />
+<br />
+<div class="row">
+    <div class="col">
+        @* TODO: inject env var for survey system *@
+        <a class="btn btn-success" target="_blank" href="https://localhost:44331/preview/@Model.Id/" role="button">Preview Questionnaire</a>
+        <button class="btn btn-primary"
+                onclick="location.href='@Url.Action("NewVersion", "Surveys", new { id = Model.Id, key = Model.SurveyKey })'">
+            Create New Version
+        </button>
+        <button class="btn btn-danger"
+                onclick="location.href='@Url.Action("DisableSurvey", "Surveys", new { id = Model.Id })'">
+            Disable Survey Version
+        </button>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#addStepModal">
+            Add Step to Survey
+        </button>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col">
+        @foreach (var step in Model.SurveySteps)
+        {
+            <div class="row bg-secondary text-white pt-2">
+                <div class="col form-group">
+                    <label>Step Position @(step.Order)</label>
+                    <input class="form-control pt-2"
+                           id="@step.Id"
+                           value="@step.Title"
+                           data-order="@(step.Order)"
+                           data-originalvalue="@step.Title"
+                           onblur="updateDiffCheck({ Id: Number(event.target.id), Title: event.target.value }, updateStep)" />
+                </div>
+            </div>
+            <div class="row bg-secondary text-white pb-2">
+                <div class="col">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#addQuestionModal" onclick="updateAddQuestionHiddenInputs(@step.Id)">
+                        Add Question
+                    </button>
+                    @if (step.StepContent == null)
+                    {
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#addStepContentModal" onclick="document.getElementById('stepContentStepId').value = @step.Id;">
+                            Add Content Section
+                        </button>
+                    }
+                    <button class="btn btn-warning" onclick="removeStepConfirm(@step.Id).then(() => window.location.reload())">
+                        Remove Step
+                    </button>
+                </div>
+            </div>
+            @if (step.StepContent != null)
+            {
+                <div class="row p-2">
+                    <div class="col">
+                        <div class="row">
+                            <label>Content Section:</label>
+                            <input class="form-control pt-2"
+                                   id="@step.StepContent.Id"
+                                   value="@step.StepContent.Title"
+                                   data-originalvalue="@step.StepContent.Title"
+                                   onblur="updateDiffCheck({ StepContentId: Number(event.target.id), Title: event.target.value }, updateStepContent)" />
+                        </div>
+                        <div class="row">
+                            <div class="p-2">
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#addContentBlockModal" onclick="document.getElementById('stepContentStepId').value = @step.StepContent.Id;">
+                                    Add Block
+                                </button>
+                            </div>
+                            <div class="p-2">
+                                <button class="btn btn-warning" onclick="removeStepContentConfirm(@step.StepContent.Id).then(() => window.location.reload())">
+                                    Remove Content Section
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var block in step.StepContent.ContentBlocks)
+                {
+                    <div class="row bg-light" id="@block.Id">
+                        <div class="col">
+                            @* TOOO: add position *@
+                            <label>Content Block: </label>
+                            <input class="form-control pt-2"
+                                   id="@block.Id"
+                                   value="@block.ContentData"
+                                   data-originalvalue="@block.ContentData"
+                                   onblur="updateDiffCheck({ ContentBlockId: Number(event.target.id), Content: event.target.value }, updateContentBlock);" />
+                            <button class="btn btn-warning m-2" onclick="removeContentBlock(@block.Id).then(() => window.location.reload())">
+                                Remove Block
+                            </button>
+                        </div>
+                    </div>
+                }
+            }
+            <div class="row bg-light">
+                <div class="col">
+                    @foreach (var question in step.Questions)
+                    {
+                        @if (question.ParentSurveyQuestion == null)
+                        {
+                            <hr />
+                            <div class="row p-2">
+                                <div class="col" id="@question.Id">
+                                    <div class="row">
+                                        <div class="col-sm-1">
+                                            <label>Actions:</label>
+                                            <button class="btn btn-warning" onclick="removeQuestion(@question.Id).then(() => window.location.reload())">
+                                                Remove
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>&nbsp;</label>
+                                            <button class="btn btn-primary" data-toggle="modal" data-target="#addQuestionModal" onclick="updateAddQuestionHiddenInputs(@step.Id, @question.Id)">
+                                                Add Sub-Question
+                                            </button>
+                                        </div>
+                                        <div class="col">
+                                            <label>Question: </label>
+                                            <input class="form-control pt-2"
+                                                   id="@question.Id"
+                                                   value="@question.Quesiton"
+                                                   data-order="@question.Order"
+                                                   data-originalvalue="@question.Quesiton"
+                                                   onblur="updateDiffCheck({ QuestionId: Number(event.target.id), Question: event.target.value, StepId: @step.Id }, updateQuestionText)" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-1">
+                                            <label>Order: </label>
+                                            <input class="form-control pt-2"
+                                                   id="@question.Id"
+                                                   value="@question.Order"
+                                                   type="number"
+                                                   max="@step.Questions.Count"
+                                                   data-order="@question.Order"
+                                                   data-originalvalue="@question.Note"
+                                                   onblur="updateDiffCheck({ QuestionId: Number(event.target.id), Order: Number(event.target.value), Note: event.target.value, StepId: @step.Id }, updateQuestionOrder)" />
+                                        </div>
+                                        <div class="col">
+                                            <label>Note: </label>
+                                            <input class="form-control pt-2"
+                                                   id="@question.Id"
+                                                   value="@question.Note"
+                                                   data-order="@question.Order"
+                                                   data-originalvalue="@question.Note"
+                                                   onblur="updateDiffCheck({ QuestionId: Number(event.target.id), Note: event.target.value, StepId: @step.Id }, updateQuestionNote)" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @if (question.ParentSurveyQuestion != null)
+                        {
+                            <div class="col border" id="@question.Id" style="background-color:darkgrey;">
+                                <div class="row p-2">
+                                    @*<div class="col">
+                                            <label>Note: </label>
+                                            <input class="form-control pt-2"
+                                                   id="@question.Id"
+                                                   value="@question.Note"
+                                                   data-order="@question.Order"
+                                                   data-originalvalue="@question.Note"
+                                                   onblur="updateDiffCheck({ QuestionId: Number(event.target.id), Note: event.target.value, StepId: @step.Id, ParentId: @question.ParentSurveyQuestionId }, updateQuestionNote)" />
+                                        </div>*@
+                                    <div class="col-sm-1">
+                                        <label>Actions:</label>
+                                        <button class="btn btn-warning" onclick="removeQuestion(@question.Id).then(() => window.location.reload())">
+                                            Remove
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <label>Order: </label>
+                                        <input class="form-control pt-2"
+                                               id="@question.Id"
+                                               value="@question.Order"
+                                               type="number"
+                                               max="@question.ParentSurveyQuestion.SurveyQuestions.Count"
+                                               data-order="@question.Order"
+                                               data-originalvalue="@question.Note"
+                                               onblur="updateDiffCheck({ QuestionId: Number(event.target.id), Order: Number(event.target.value), Note: event.target.value, StepId: @step.Id, ParentId: @question.ParentSurveyQuestionId }, updateQuestionOrder)" />
+                                    </div>
+                                    <div class="col">
+                                        <label>Question: </label>
+                                        <input class="form-control pt-2"
+                                               id="@question.Id"
+                                               value="@question.Quesiton"
+                                               data-order="@question.Order"
+                                               data-parent="@question.ParentSurveyQuestionId"
+                                               data-originalvalue="@question.Quesiton"
+                                               onblur="updateDiffCheck({ QuestionId: Number(event.target.id), Question: event.target.value, StepId: @step.Id, ParentId: @question.ParentSurveyQuestionId }, updateQuestionText)" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <hr />
+        }
+    </div>
+</div>
+
+@await Html.PartialAsync("_AddStep")
+@await Html.PartialAsync("_AddStepContent")
+@await Html.PartialAsync("_AddContentBlock")
+@await Html.PartialAsync("_AddQuestion")
+
+<script>
+    function updateAddQuestionHiddenInputs(step, parent = null) {
+        document.getElementById('questionParentId').value = parent;
+        document.getElementById('questionStepId').value = step;
+    }
+
+    function updateDiffCheck(body, cb) {
+        const evnt = event;
+        if (event.target.value != event.target.dataset.originalvalue) cb(body).then(e => evnt.target.dataset.originalvalue = evnt.target.value);
+    }
+</script>

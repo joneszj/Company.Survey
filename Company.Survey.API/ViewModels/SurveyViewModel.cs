@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
 namespace Company.Survey.API.ViewModels
 {
@@ -19,6 +20,20 @@ namespace Company.Survey.API.ViewModels
             RequestedStartDate = clientSurvey.RequestedStartDate?.ToString("yyyy-MM-dd");
             RequestedEndDate = clientSurvey.RequestedEndDate?.ToString("yyyy-MM-dd");
             Steps = clientSurvey.Survey.SurveySteps.Select(surveyStep => new Step(surveyStep, clientSurvey.ClientQuestionReplies)).OrderBy(e=>e.Order);
+        }
+
+        public SurveyViewModel(Core.Data.Entities.Survey survey)
+        {
+            IsComplete = false;
+            Title = survey.Title;
+            Client = new ClientViewModel();
+            CompanyName = survey.CompanyName;
+            CompanySite = survey.CompanySite;
+            Contact = $"{survey.ContactTitle} {survey.ContactPhone}";
+            DateOfQuestionnaire = survey.DateOfQuestionnaire.ToString("yyyy-MM-dd");
+            RequestedStartDate = DateTime.Now.ToString("yyyy-MM-dd");
+            RequestedEndDate = DateTime.Now.ToString("yyyy-MM-dd");
+            Steps = survey.SurveySteps.Select(surveyStep => new Step(surveyStep, new List<Reply>())).OrderBy(e => e.Order);
         }
 
         public bool IsComplete { get; set; }
@@ -41,10 +56,9 @@ namespace Company.Survey.API.ViewModels
             Title = step.Title;
             Order = step.Order;
             StepContent = new Content(step.StepContent);
-            Questions = step.Questions.Where(e=>e.SurveyQuestionGroupID == null)
+            Questions = step.Questions.Where(e=>e.ParentSurveyQuestionId == null)
                 .Select(question => new Question(question, replies))
-                .Concat(step.QuestionGroups.Select(g => new Question(g, replies)))
-                .OrderBy(e=>e.Order);
+                .OrderBy(e => e.Order);
         }
 
         public int Id { get; set; }
@@ -61,7 +75,7 @@ namespace Company.Survey.API.ViewModels
             if (stepContent != null)
             {
                 Title = stepContent.Title;
-                ContentBlocks = stepContent.ContentBlocks.Select(e => e.ContentData);
+                ContentBlocks = stepContent.ContentBlocks.Select(e => HttpUtility.UrlDecode(e.ContentData));
             }
         }
         public string Title { get; set; }
@@ -70,14 +84,6 @@ namespace Company.Survey.API.ViewModels
 
     public class Question
     {
-        public Question(SurveyQuestionGroup g, ICollection<Reply> replies)
-        {
-            Order = g.Order;
-            QuesitonText = g.Title;
-            GroupedQuestions = g.SurveyGroupQuestions.OrderBy(e => e.Order)
-                .Select(e => new Question(e, replies));
-        }
-
         public Question(SurveyQuestion question, ICollection<Reply> replies)
         {
             Id = question.Id;
@@ -85,9 +91,10 @@ namespace Company.Survey.API.ViewModels
             Note = question.Note;
             Order = question.Order;
             ExampleReplies = question?.PossibleReplies?.Select(e => e.ReplyData);
-            GroupId = question?.SurveyQuestionGroup?.Id;
+            GroupId = question.ParentSurveyQuestionId;
+            GroupedQuestions = question.SurveyQuestions?.Select(e => new Question(e, replies)).OrderBy(e=>e.Order);
             ClientReply = replies.FirstOrDefault(e => e.SurveyQuestionId == question.Id)?.ReplyData;
-            GroupedReplies = replies.OrderBy(e=>e.GroupIndex).Where(e=>e.SurveyQuestionId == question.Id)?.Select(e => e.ReplyData);
+            GroupedReplies = replies.OrderBy(e=>e.GroupIndex).Where(e=>e.SurveyQuestionId == question.Id)?.Select(e => new GroupedReply { Id = e.Id, Reply = e.ReplyData });
         }
 
         public int Id { get; set; }
@@ -97,21 +104,13 @@ namespace Company.Survey.API.ViewModels
         public IEnumerable<string> ExampleReplies { get; set; }
         public int? GroupId { get; set; }
         public string ClientReply { get; set; }
-        public IEnumerable<string> GroupedReplies { get; set; }
+        public IEnumerable<GroupedReply> GroupedReplies { get; set; }
         public IEnumerable<Question> GroupedQuestions { get; set; }
     }
 
-    public class Group
+    public class GroupedReply
     {
-        public Group(SurveyQuestionGroup group)
-        {
-            Title = group.Title;
-            Note = group.Note;
-            Order = group.Order;
-        }
-
-        public string Title { get; set; }
-        public string Note { get; set; }
-        public int Order { get; set; }
+        public int Id { get; set; }
+        public string Reply { get; set; }
     }
 }

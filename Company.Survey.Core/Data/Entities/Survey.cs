@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Company.Survey.Core.Data.Entities
 {
     public class Survey : CoreBase
     {
-        public int SuveryId { get; set; }
+        /// <summary>
+        /// Used to differentiate surveys of same key but different version
+        /// </summary>
+        [Required]
+        public string SurveyKey { get; set; }
+        [Required]
         public int Version { get; set; }
         [Required]
         public string CompanyName { get; set; }
@@ -21,6 +27,7 @@ namespace Company.Survey.Core.Data.Entities
         public DateTime DateOfQuestionnaire { get; set; }
         public string Title { get; set; }
         public ICollection<SurveyStep> SurveySteps { get; set; }
+        [ForeignKey("SurveyId")]
         public ICollection<ClientSurveys> ClientSurveys { get; set; }
     }
 }

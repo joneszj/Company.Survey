@@ -1,0 +1,33 @@
+﻿<div class="modal" id="mailSurveyToClient">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Send Survey</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="stepContentTitle">Select Survey</label>
+                    @Html.DropDownList("Types", ViewData["Surveys"] as List<SelectListItem>, new { id = "surveyselect" })
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="sendSurvey()">
+                    Send Survey
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function sendSurvey() {
+        fetch(`${window.location.origin}/mail/send`, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: "same-origin",
+            body: JSON.stringify({ Email: $('#email').val(), SurveyId: Number($('#surveyselect').val()) })
+        })
+            .then(e => e.ok ? $.notify('Success!', "success") : $.notify('Something went wrong :(', "error"))
+            //.then(() => window.location.reload());
+    }
+</script>

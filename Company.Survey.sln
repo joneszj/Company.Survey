@@ -16,10 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Survey.API", "Compa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Survey.Web.Angular", "Company.Survey.Web.Angular\Company.Survey.Web.Angular.csproj", "{B2F0F921-4840-47ED-89CA-C6C3301E5251}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{E4333DB1-A08A-4B26-8182-5574BF7642B6}"
-	ProjectSection(SolutionItems) = preProject
-		SqlSeed.sql = SqlSeed.sql
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Company.Survey.Admin", "Company.Survey.Admin\Company.Survey.Admin.csproj", "{B4278B65-21A6-4FAA-9E4A-25DE7584F24A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +36,10 @@ Global
 		{B2F0F921-4840-47ED-89CA-C6C3301E5251}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2F0F921-4840-47ED-89CA-C6C3301E5251}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2F0F921-4840-47ED-89CA-C6C3301E5251}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4278B65-21A6-4FAA-9E4A-25DE7584F24A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4278B65-21A6-4FAA-9E4A-25DE7584F24A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4278B65-21A6-4FAA-9E4A-25DE7584F24A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4278B65-21A6-4FAA-9E4A-25DE7584F24A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
