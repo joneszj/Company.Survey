@@ -117,13 +117,12 @@ function updateQuestionNote(body) {
 }
 
 function updateQuestionOrder(body) {
-    // TODO: test/complete
     return fetch(`${window.location.origin}/question/updateorder`, {
         method: 'put',
         headers: { 'Content-Type': 'application/json' },
         credentials: "same-origin",
         body: JSON.stringify(body)
-    }).then(e => assertStatus(e));
+    }).then(e => assertStatus(e)).then(() => window.location.reload());
 }
 
 function addQuestion(body) {

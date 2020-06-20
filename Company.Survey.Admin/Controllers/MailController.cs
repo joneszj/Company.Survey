@@ -45,17 +45,19 @@ public class MailController : Controller
 
         try
         {
-            // TODO: add environment var for email
-            await _smtp.SendMailAsync(
-                new MailMessage(
+            var email = new MailMessage(
                     from: "system@companysurvey.com",
                     to: clientSurvey.Client.Email,
                     subject: "New Questionnaire!",
-                    body: $"Hello {clientSurvey.Client.FirstName} {clientSurvey.Client.LastName}, please complete the following survey: <a href='https://localhost:44331/{clientSurvey.Client.Email}/{clientSurvey.ClientSurveyKey}' target='_blank'>{clientSurvey.Survey.Title}<a/>"
+                    body: $"Hello {clientSurvey.Client.FirstName} {clientSurvey.Client.LastName}, please complete the following survey: <a href='https://localhost:44331/{clientSurvey.Client.Email}/{clientSurvey.ClientSurveyKey}' target='_blank'>{clientSurvey.Survey.Title}</a>"
                 )
-            );
+            {
+                IsBodyHtml = true
+            };
+            // TODO: add environment var for email
+            await _smtp.SendMailAsync(email);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             throw;
         }

@@ -152,7 +152,7 @@
                                                    max="@step.Questions.Count"
                                                    data-order="@question.Order"
                                                    data-originalvalue="@question.Note"
-                                                   onblur="updateDiffCheck({ QuestionId: Number(event.target.id), Note: event.target.value, StepId: @step.Id }, updateQuestionOrder)" />
+                                                   onblur="updateDiffCheck({ QuestionId: Number(event.target.id), Order: Number(event.target.value), Note: event.target.value, StepId: @step.Id }, updateQuestionOrder)" />
                                         </div>
                                         <div class="col">
                                             <label>Note: </label>
@@ -195,7 +195,7 @@
                                                max="@question.ParentSurveyQuestion.SurveyQuestions.Count"
                                                data-order="@question.Order"
                                                data-originalvalue="@question.Note"
-                                               onblur="updateDiffCheck({ QuestionId: Number(event.target.id), Note: event.target.value, StepId: @step.Id, ParentId: @question.ParentSurveyQuestionId }, updateQuestionOrder)" />
+                                               onblur="updateDiffCheck({ QuestionId: Number(event.target.id), Order: Number(event.target.value), Note: event.target.value, StepId: @step.Id, ParentId: @question.ParentSurveyQuestionId }, updateQuestionOrder)" />
                                     </div>
                                     <div class="col">
                                         <label>Question: </label>
